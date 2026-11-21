@@ -1,0 +1,11 @@
+# Optional cloud deployment. Recommended setup for the broadcast is local: `node server.js` on the streaming PC.
+# Render's free disk is wiped on restart, so saved state (casters, predictions) would be lost there.
+services:
+  - type: web
+    name: overdrive-major-live
+    runtime: node
+    buildCommand: echo "no dependencies"
+    startCommand: node server.js
+    envVars:
+      - key: SYNC_KEY
+        sync: false

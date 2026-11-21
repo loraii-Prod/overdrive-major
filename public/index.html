@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OverDrive Major 2026 · Broadcast</title>
+<script>
+  // the producer uses its own control-surface stylesheet; every on-air source uses the broadcast stylesheet
+  document.write(/(^|[#?&])control/i.test(location.hash + location.search) ? '<link rel="stylesheet" href="/ui.css">' : '<link rel="stylesheet" href="/app.css">');
+</script>
+</head>
+<body class="scene">
+<div id="root"></div>
+<script src="/core.js"></script>
+<script src="/scenes.js"></script>
+<script src="/producer.js"></script>
+<script>
+/* One address per OBS browser source; each source holds several internal states switched from the producer.
+   /  or #bracket  bracket / tournament overview          #gameplay     editorial popouts, transparent
+   #matchup        matchup / team introduction             #player       player profile / comparison
+   #maps           map pool / map card                     #postmatch    result / MVP
+   #desk           caster desk (add &key=… off this PC)    #predictions  caster predictions
+   #waiting        Starting soon / BRB / Ending            #casters      next match strip
+   #control        producer.  Add &preview to render a source's preview state. Wildcard addresses still work. */
+const h = (location.hash + location.search).toLowerCase(), has = k => new RegExp("(^|[#?&])" + k).test(h);
+const mode = has("control") ? "control" : has("gameplay") ? "gameplay" : has("matchup") ? "matchup" : has("desk") ? "desk"
+  : has("player") ? "player" : has("maps") ? "maps" : (has("postmatch") || has("post") || has("mvp")) ? "post"
+  : has("predictions") ? "predictions" : (has("waiting") || has("brb") || has("intermission") || has("starting") || has("ending")) ? "waiting"
+  : has("caster") ? "casters" : "bracket";
+const preview = has("preview");
+const root = document.getElementById("root");
+OD.mode = mode;
+if (mode === "control") PRODUCER.init();
+else ({ gameplay: SC.gameplay, matchup: SC.matchup, desk: SC.desk, predictions: SC.predictions, waiting: SC.brk, casters: SC.casters, bracket: SC.bracket,
+  player: SC.player, maps: SC.maps, post: SC.post }[mode])(root, preview);
+OD.connect();
+</script>
+</body>
+</html>

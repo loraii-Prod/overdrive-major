@@ -1,0 +1,7 @@
+{
+  "name": "overdrive-major-broadcast",
+  "private": true,
+  "description": "OverDrive Major 2026 broadcast graphics engine with live sync",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

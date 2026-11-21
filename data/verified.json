@@ -1,0 +1,1241 @@
+{
+ "_about": "Verified reference data carried over from the original Overdrive project (MAJOR_PLAYERS.txt, MAJOR_NOTES.md). Every entry names its source and read date. Edit here; nothing is invented at runtime.",
+ "players": {
+  "massa": {
+   "handle": "Massa",
+   "realName": "Dennis Lotze",
+   "country": "Germany",
+   "born": "1994-11-10",
+   "earnings": "$39,752",
+   "history": "Infused (–2012), Team Dignitas 2012-14, EURONICS 2015, aAa 2016, iNSEP 2016, Team expert.Black 2016-18, BIG 2018-present",
+   "results": [
+    {
+     "date": "2026-08-22",
+     "place": "9th-12th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "BIG",
+     "prize": "$12,500"
+    },
+    {
+     "date": "2026-05-16",
+     "place": "5th-8th",
+     "tier": "Tier 1",
+     "event": "Red Bull Faster 2026",
+     "team": "BIG",
+     "prize": "$2,150"
+    },
+    {
+     "date": "2025-11-01",
+     "place": "3rd-4th",
+     "tier": "Tier 1",
+     "event": "Trackmania World Cup 2025",
+     "team": "BIG",
+     "prize": null
+    },
+    {
+     "date": "2025-10-05",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "TMWT 2025 Global Playoffs #2",
+     "team": "BIG",
+     "prize": "$2,935"
+    },
+    {
+     "date": "2023-06-25",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "TMWT 2023 Stage 2 Grand League",
+     "team": "BIG",
+     "prize": "$5,453"
+    },
+    {
+     "date": "2022-08-14",
+     "place": "5th-8th",
+     "tier": "Tier 1",
+     "event": "Arctic Gaming Experience 2022",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2016-04-16",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Gamers Assembly 2016 - Tech",
+     "team": "aAa",
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "granady": {
+   "handle": "GranaDy",
+   "realName": "Nico Gyarmati",
+   "country": "Germany",
+   "born": "2001-07-14",
+   "earnings": "$75,525",
+   "history": "Loud esport 2020, Wavy Esport 2020-21, ALTERNATE aTTaX 2021-22, BIG 2022-present",
+   "results": [
+    {
+     "date": "2026-10-17",
+     "place": "1st",
+     "tier": "Showmatch",
+     "event": "Opel Trackmania Cup",
+     "team": "BIG",
+     "prize": "$3,371"
+    },
+    {
+     "date": "2026-08-22",
+     "place": "5th-6th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "BIG",
+     "prize": "$20,000"
+    },
+    {
+     "date": "2026-03-29",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "Road to EWC: DreamHack Birmingham 2026",
+     "team": null,
+     "prize": "$2,100"
+    },
+    {
+     "date": "2025-10-05",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "TMWT 2025 Global Playoffs #2",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-03-01",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "Red Bull Faster 2025",
+     "team": null,
+     "prize": "$7,887"
+    },
+    {
+     "date": "2024-03-17",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "BIG LAN Race",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2023-10-28",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "Ascension Tournament 2023",
+     "team": null,
+     "prize": "$9,472"
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "heav": {
+   "handle": "Heav",
+   "realName": "Lucas Fay",
+   "country": "France",
+   "born": null,
+   "earnings": "$11,967",
+   "history": "DNF Esport 2020, KWK Esport 2021, Athletix 2021-22, Glorious Esport 2022-24, Weibo Gaming 2026 (Feb-Oct)",
+   "results": [
+    {
+     "date": "2026-10-07",
+     "place": "3rd",
+     "tier": "Tier 2",
+     "event": "Fourmula Vae 2026",
+     "team": "WBG",
+     "prize": null
+    },
+    {
+     "date": "2026-01-18",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "RDS CUP Season 4",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-12-21",
+     "place": "5th",
+     "tier": "Tier 1",
+     "event": "BIG Trackmania Cup",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-06-14",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "RDS CUP Season 3",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-05-10",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Kimi of the Year Season 2",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2024-09-29",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Octagons Camel Cup 2024",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2024-03-10",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Flower Cup 2024",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2023-11-29",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Octagons Camel Cup 2023",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "nayko": {
+   "handle": "Nayko",
+   "realName": "Maxence Cloud",
+   "country": "France",
+   "born": "2006-04-09",
+   "earnings": "$11,705",
+   "history": "many French teams 2020-25 (Loud Esport, TLB, DNF, Thrive, Lystral), Loading 2025-26, FUT Esports Feb 2026-present",
+   "results": [
+    {
+     "date": "2026-09-20",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Coupe de France 2026",
+     "team": "FUT",
+     "prize": null
+    },
+    {
+     "date": "2026-08-22",
+     "place": "17th-20th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "FUT",
+     "prize": "$8,000"
+    },
+    {
+     "date": "2026-03-23",
+     "place": "4th",
+     "tier": "Tier 2",
+     "event": "Maji Mondays Season 5",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2026-03-08",
+     "place": "3rd",
+     "tier": "Tier 2",
+     "event": "InsaLan XX Elite",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "whizzy": {
+   "handle": "Whizzy",
+   "realName": "Alexander Page",
+   "country": "United Kingdom",
+   "born": "2002-04-12",
+   "earnings": "$14,160",
+   "history": "Exalty 2022-23, WYLDE 2023-26, S8UL Esports Apr 2026-present",
+   "results": [
+    {
+     "date": "2026-08-22",
+     "place": "17th-20th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "S8UL",
+     "prize": "$8,000"
+    },
+    {
+     "date": "2025-10-18",
+     "place": "5th",
+     "tier": "Tier 1",
+     "event": "Out of the Blue",
+     "team": "WYLDE",
+     "prize": null
+    },
+    {
+     "date": "2025-05-15",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "Trackmania Formula E Championship Season 2",
+     "team": "WYLDE",
+     "prize": null
+    },
+    {
+     "date": "2025-05-15",
+     "place": "2nd",
+     "tier": "Tier 2",
+     "event": "TM Formula E: Tokyo",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-04-20",
+     "place": "4th",
+     "tier": "Tier 1",
+     "event": "Trent on Track",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-04-13",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "Beacon Duo League Season 1",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-04-09",
+     "place": "2nd",
+     "tier": "Tier 2",
+     "event": "TM Formula E: Miami",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "stufts": {
+   "handle": "Stufts",
+   "realName": "Mees Jenema",
+   "country": "Netherlands",
+   "born": "2005-03-10",
+   "earnings": "$19,963",
+   "history": "Taipan Academy, Team 300, SHIFT 2022, w. 2022-present, Exalty 2023, WYLDE 2023-25, GodLike Esports Apr 2026-present",
+   "results": [
+    {
+     "date": "2026-08-22",
+     "place": "7th-8th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "GodLike",
+     "prize": "$15,000"
+    },
+    {
+     "date": "2024-07-24",
+     "place": "2nd",
+     "tier": "Tier 2",
+     "event": "TM Formula E Championship: London Race 3",
+     "team": "WYLDE",
+     "prize": null
+    },
+    {
+     "date": "2024-07-21",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "TM Formula E Championship: London Race 2",
+     "team": "WYLDE",
+     "prize": null
+    },
+    {
+     "date": "2024-07-20",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "TM Formula E Championship: London Race 1",
+     "team": "WYLDE",
+     "prize": null
+    },
+    {
+     "date": "2024-05-26",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Trackmania x Comic Con Baltics 2024",
+     "team": "WYLDE",
+     "prize": null
+    },
+    {
+     "date": "2024-03-17",
+     "place": "4th",
+     "tier": "Tier 2",
+     "event": "BIG LAN Race",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "l1ngo": {
+   "handle": "L1ngo",
+   "realName": "Émile Côté",
+   "country": "Canada",
+   "born": null,
+   "earnings": "$11,444",
+   "history": "Semper Fi, Loud Esport 2022, iCONIA 2023, Evo 2023-26, GodLike Esports Apr 2026-present",
+   "results": [
+    {
+     "date": "2026-08-22",
+     "place": "25th-28th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "GodLike",
+     "prize": "$4,000"
+    },
+    {
+     "date": "2026-05-30",
+     "place": "2nd",
+     "tier": "Tier 2",
+     "event": "LAN ETS 2026",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-10-18",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "Out of the Blue",
+     "team": "EVO",
+     "prize": "$2,449"
+    },
+    {
+     "date": "2025-10-11",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "die Bayerische Duo Dash",
+     "team": null,
+     "prize": "$2,033",
+     "partner": "eLconn21"
+    },
+    {
+     "date": "2024-06-29",
+     "place": "2nd",
+     "tier": "Tier 2",
+     "event": "Lan ETS 2024",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "scrapie": {
+   "handle": "Scrapie",
+   "realName": "Dennis Heinen",
+   "country": "Belgium",
+   "born": "1998-01-02",
+   "earnings": "$15,446",
+   "history": "Planetkey Dynamics, Reflex Esport Club 2018-19, Team PAX 2019, x6tence 2019-20, Lazarus Esports 2020-21, Sprout 2022-24",
+   "results": [
+    {
+     "date": "2024-03-30",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "TM Formula E Championship: Tokyo Race 1",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2023-03-18",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "TMWT 2023 Stage 1 Challenger League",
+     "team": "Sprout",
+     "prize": null
+    },
+    {
+     "date": "2023-02-27",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "Maji Mondays",
+     "team": "Sprout",
+     "prize": null
+    },
+    {
+     "date": "2021-03-14",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "Trackmania Grand League: Winter 2021 Final",
+     "team": "Lazarus",
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "melioo": {
+   "handle": "Melioo",
+   "realName": "Emerson Almeida",
+   "country": "France",
+   "born": null,
+   "earnings": "$1,557",
+   "history": "Homyno Tsun 2021-22, Team Alkya 2023, Ferox Industries 2023, w. 2023-25, Oserv Esport 2024-25",
+   "results": [
+    {
+     "date": "2024-09-15",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Holy'n Lyon",
+     "team": "OSV",
+     "prize": null
+    },
+    {
+     "date": "2024-06-08",
+     "place": "2nd",
+     "tier": "Tier 3",
+     "event": "TMWT 2024 Challenger Community Cup #1",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2024-02-25",
+     "place": "1st",
+     "tier": "Tier 3",
+     "event": "FastPoint League",
+     "team": "w.",
+     "prize": null
+    },
+    {
+     "date": "2023-05-07",
+     "place": "2nd",
+     "tier": "Tier 3",
+     "event": "TMWT 2023 Stage 2 Regionals Europe Regional 1",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2023-04-09",
+     "place": "4th",
+     "tier": "Tier 2",
+     "event": "Gamers Assembly 2023: Mixed",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "epos": {
+   "handle": "Epos",
+   "realName": "Robert McKay",
+   "country": "United Kingdom",
+   "born": null,
+   "earnings": "$96,504",
+   "history": "Evo 2023, w. 2023-present, Split 2023, BLUEJAYS Sports 2024-25, Team Liquid Feb 2026-present",
+   "results": [
+    {
+     "date": "2026-09-13",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "XPEvo 2026",
+     "team": "Team Liquid",
+     "prize": "$4,641"
+    },
+    {
+     "date": "2026-08-22",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "Team Liquid",
+     "prize": "$70,000"
+    },
+    {
+     "date": "2026-05-16",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "Red Bull Faster 2026",
+     "team": null,
+     "prize": "$5,927"
+    },
+    {
+     "date": "2026-03-29",
+     "place": "4th",
+     "tier": "Tier 1",
+     "event": "Road to EWC: DreamHack Birmingham 2026",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-09-28",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "XPEvo 2025",
+     "team": "SWIFT",
+     "prize": null
+    },
+    {
+     "date": "2025-07-06",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "TMWT 2025 Global Playoffs #1",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-04-20",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "Trent on Track",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "mime": {
+   "handle": "Mime",
+   "realName": "Hubert Dziedzic",
+   "country": "Poland",
+   "born": "2002-07-10",
+   "earnings": "$47,866",
+   "history": "Tauro 2021-22, Into The Breach 2022-25, JOEL 2024-present, Team Nemesis 2025-26, Natus Vincere Feb 2026-present",
+   "results": [
+    {
+     "date": "2026-08-22",
+     "place": "4th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "NAVI",
+     "prize": "$25,000"
+    },
+    {
+     "date": "2026-05-24",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Trackmania x Comic Con Baltics 2026",
+     "team": "NAVI",
+     "prize": null
+    },
+    {
+     "date": "2025-11-01",
+     "place": "3rd-4th",
+     "tier": "Tier 1",
+     "event": "Trackmania World Cup 2025",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-10-05",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "TMWT 2025 Global Playoffs #2",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-05-25",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "TM x Comic Con Baltics 2025",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-04-13",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "Beacon Duo League Season 1",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2023-11-26",
+     "place": "3rd-4th",
+     "tier": "Tier 1",
+     "event": "TMWT 2023 World Championship",
+     "team": "Into The Breach",
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "elconn21": {
+   "handle": "eLconn21",
+   "realName": "Filip Šprungl",
+   "country": "Czechia",
+   "born": "2003-09-18",
+   "earnings": "$75,934",
+   "history": "Loud Esport 2022, Into The Breach 2022-23, JOEL 2024-present, Team Nemesis Jan-Sep 2026",
+   "results": [
+    {
+     "date": "2026-08-22",
+     "place": "5th-6th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "Team Nemesis",
+     "prize": "$20,000"
+    },
+    {
+     "date": "2025-10-18",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Out of the Blue",
+     "team": "JOEL",
+     "prize": null
+    },
+    {
+     "date": "2025-10-11",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "die Bayerische Duo Dash",
+     "team": null,
+     "prize": null,
+     "partner": "L1ngo"
+    },
+    {
+     "date": "2025-05-25",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Trackmania x Comic Con Baltics 2025",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2024-06-08",
+     "place": "2nd",
+     "tier": "Campaign",
+     "event": "Deep Dip 2",
+     "team": null,
+     "prize": "$9,808"
+    },
+    {
+     "date": "2024-04-29",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Maji Mondays Season 3",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2023-08-28",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "Maji Mondays Season 2",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "nabla": {
+   "handle": "Nabla",
+   "realName": "",
+   "country": "France",
+   "born": "2009",
+   "earnings": "$1,030",
+   "history": "BC Racing 2023-24, Silnce Esport Nov 2024-present",
+   "results": [
+    {
+     "date": "2026-09-13",
+     "place": "13th-14th",
+     "tier": "Tier 1",
+     "event": "XPEvo 2026",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2026-05-23",
+     "place": "2nd",
+     "tier": "Tier 3",
+     "event": "Random Cup Season 2 Finale",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2026-03-23",
+     "place": "3rd",
+     "tier": "Tier 2",
+     "event": "Maji Mondays Season 5",
+     "team": "SILNCE",
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "walegen": {
+   "handle": "Walegen",
+   "realName": "Remi Despretz--Honoré",
+   "country": "France",
+   "born": "2005-01-08",
+   "earnings": "$3,033",
+   "history": "Hypnotik Esports 2020-21, DNF Esport 2021, Lille Esport 2022-25",
+   "results": [
+    {
+     "date": "2026-10-07",
+     "place": "2nd",
+     "tier": "Tier 2",
+     "event": "Fourmula Vae 2026",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2026-10-04",
+     "place": "2nd",
+     "tier": "Tier 2",
+     "event": "Springs Mania Cup",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2025-09-12",
+     "place": "2nd",
+     "tier": "Tier 2",
+     "event": "Wirtual Birthday Cup 2025",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2024-12-30",
+     "place": "1st",
+     "tier": "Other",
+     "event": "BIG YEK Monthly Cup Dec 2024",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2024-10-04",
+     "place": "3rd",
+     "tier": "Tier 2",
+     "event": "Fourmula Vae 2024",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2024-09-12",
+     "place": "1st",
+     "tier": "Tier 2",
+     "event": "Wirtual Birthday Cup 2024",
+     "team": "LILLE",
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "gwen": {
+   "handle": "Gwen",
+   "realName": "Gwendal Duparc",
+   "country": "France",
+   "born": "2004-08-23",
+   "earnings": "$231,395",
+   "history": "GameWard, Gamers First 2022-24, Ici Japon Corp. Esport 2024-26, All Gamers Global Feb 2026-present",
+   "results": [
+    {
+     "date": "2026-08-22",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "AG",
+     "prize": "$130,000"
+    },
+    {
+     "date": "2024-09-21",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Volvic Duo Dash",
+     "team": null,
+     "prize": null,
+     "partner": "Binkss"
+    },
+    {
+     "date": "2023-10-28",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Ascension Tournament 2023",
+     "team": "Gamers First",
+     "prize": "$66,307"
+    },
+    {
+     "date": "2023-05-03",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Cupra Cup",
+     "team": "G1",
+     "prize": null
+    },
+    {
+     "date": "2022-06-04",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "ZrT Trackmania Cup 2022",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2021-12-05",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Trackmania Grand League: Fall 2021 Steps",
+     "team": "GameWard",
+     "prize": null
+    },
+    {
+     "date": "2021-07-29",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "ZrT Trackmania Cup 2021",
+     "team": null,
+     "prize": null
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  },
+  "binkss": {
+   "handle": "Binkss",
+   "realName": "Alexandre Touche",
+   "country": "France",
+   "born": "2004-03-26",
+   "earnings": "$40,519",
+   "history": "ziDream, Gamers First 2022-24, Team BPP 2024-25, All Gamers Global Feb 2026-present",
+   "results": [
+    {
+     "date": "2026-08-22",
+     "place": "9th-12th",
+     "tier": "Tier 1",
+     "event": "Esports World Cup 2026",
+     "team": "AG",
+     "prize": "$12,500"
+    },
+    {
+     "date": "2025-07-06",
+     "place": "2nd",
+     "tier": "Tier 1",
+     "event": "TMWT 2025 Global Playoffs #1",
+     "team": null,
+     "prize": null
+    },
+    {
+     "date": "2024-10-25",
+     "place": "3rd",
+     "tier": "Tier 1",
+     "event": "Trackmania World Cup 2024",
+     "team": "BPP",
+     "prize": null
+    },
+    {
+     "date": "2024-09-21",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Volvic Duo Dash",
+     "team": null,
+     "prize": null,
+     "partner": "Gwen"
+    },
+    {
+     "date": "2023-06-25",
+     "place": "4th",
+     "tier": "Tier 1",
+     "event": "TMWT 2023 Stage 2 Grand League",
+     "team": "G1",
+     "prize": null
+    },
+    {
+     "date": "2023-05-03",
+     "place": "1st",
+     "tier": "Tier 1",
+     "event": "Cupra Cup",
+     "team": "G1",
+     "prize": null,
+     "partner": "Gwen"
+    }
+   ],
+   "source": "Liquipedia player pages, read 9–10 Nov 2026 (MAJOR_PLAYERS.txt, original Overdrive project)"
+  }
+ },
+ "teams": {
+  "big": [
+   {
+    "text": "Split 2 Division 1 champions",
+    "source": "Liquipedia, read 9–10 Nov 2026"
+   }
+  ],
+  "futxheav": [
+   {
+    "text": "Qualified as Split 2 Division 1 runner-up",
+    "source": "Liquipedia Major page, 9 Nov 2026"
+   }
+  ],
+  "airwalkers": [
+   {
+    "text": "Qualified as Split 2 Division 1 3rd place",
+    "source": "Liquipedia Major page, 9 Nov 2026"
+   }
+  ],
+  "cook": [
+   {
+    "text": "Qualified as Split 2 Division 1 4th place",
+    "source": "Liquipedia Major page, 9 Nov 2026"
+   }
+  ],
+  "ragnarok": [
+   {
+    "text": "Qualified through the Wildcards (1st–2nd)",
+    "source": "Liquipedia Major page, 9 Nov 2026"
+   }
+  ],
+  "navixjoel": [
+   {
+    "text": "Won all three Wildcard matches 3–0: TMTAS, Brothers, ONIC",
+    "source": "Liquipedia, read 9–10 Nov 2026"
+   },
+   {
+    "text": "Split 2 Division 2 champions as Natus Vincere",
+    "source": "Liquipedia, read 9–10 Nov 2026"
+   }
+  ],
+  "rnboi": [
+   {
+    "text": "Qualified through the Wildcards (3rd–4th)",
+    "source": "Liquipedia Major page, 9 Nov 2026"
+   }
+  ],
+  "allgamers": [
+   {
+    "text": "Qualified through the Wildcards (3rd–4th)",
+    "source": "Liquipedia Major page, 9 Nov 2026"
+   },
+   {
+    "text": "Split 1 Division 1 league stage: 3rd, 8–1",
+    "source": "Liquipedia, read 9–10 Nov 2026"
+   }
+  ]
+ },
+ "event": {
+  "name": "OverDrive 2026 Split 3: Major",
+  "dates": "21–22 November 2026",
+  "format": "8 teams · double elimination · all matches Bo5 · TMWT Duos",
+  "prizePool": "€13,600",
+  "prizes": [
+   [
+    "1st",
+    "€5,000"
+   ],
+   [
+    "2nd",
+    "€3,000"
+   ],
+   [
+    "3rd",
+    "€2,000"
+   ],
+   [
+    "4th",
+    "€1,000"
+   ],
+   [
+    "5th–6th",
+    "€800"
+   ],
+   [
+    "7th–8th",
+    "€500"
+   ]
+  ],
+  "source": "Liquipedia Major page, read 9 Nov 2026"
+ },
+ "maps": {
+  "source": "trackmania.io, OverDrive 2026 Split 3 campaign, read 10 Nov 2026",
+  "list": [
+   {
+    "id": "india",
+    "name": "India",
+    "author": "1:05.000",
+    "pbs": [
+     [
+      "eLconn21",
+      "1:04.068"
+     ],
+     [
+      "Melioo",
+      "1:04.075"
+     ],
+     [
+      "Epos",
+      "1:04.151"
+     ],
+     [
+      "Gwen",
+      "1:04.240"
+     ],
+     [
+      "Mime",
+      "1:04.263"
+     ],
+     [
+      "Nabla",
+      "1:04.281"
+     ],
+     [
+      "Binkss",
+      "1:04.288"
+     ],
+     [
+      "Walegen",
+      "1:04.298"
+     ]
+    ]
+   },
+   {
+    "id": "czech",
+    "name": "Czech Republic",
+    "author": "1:02.000",
+    "pbs": [
+     [
+      "Melioo",
+      "59.848"
+     ],
+     [
+      "Binkss",
+      "59.898"
+     ],
+     [
+      "Epos",
+      "59.976"
+     ],
+     [
+      "Nabla",
+      "59.985"
+     ],
+     [
+      "Mime",
+      "59.988"
+     ],
+     [
+      "eLconn21",
+      "1:00.007"
+     ],
+     [
+      "Gwen",
+      "1:00.034"
+     ],
+     [
+      "Walegen",
+      "1:00.382"
+     ]
+    ]
+   },
+   {
+    "id": "egypt",
+    "name": "Egypt",
+    "author": "1:12.000",
+    "pbs": [
+     [
+      "Epos",
+      "1:09.493"
+     ],
+     [
+      "Gwen",
+      "1:09.545"
+     ],
+     [
+      "Nabla",
+      "1:10.267"
+     ],
+     [
+      "Walegen",
+      "1:10.385"
+     ],
+     [
+      "Binkss",
+      "1:10.518"
+     ],
+     [
+      "Massa",
+      "1:10.632"
+     ],
+     [
+      "Melioo",
+      "1:11.282"
+     ]
+    ]
+   },
+   {
+    "id": "uk",
+    "name": "United Kingdom",
+    "author": "1:11.000",
+    "pbs": [
+     [
+      "Nabla",
+      "1:08.891"
+     ],
+     [
+      "eLconn21",
+      "1:09.281"
+     ],
+     [
+      "Mime",
+      "1:09.353"
+     ],
+     [
+      "Gwen",
+      "1:09.457"
+     ],
+     [
+      "Walegen",
+      "1:09.521"
+     ],
+     [
+      "Melioo",
+      "1:09.557"
+     ],
+     [
+      "Binkss",
+      "1:09.657"
+     ],
+     [
+      "Epos",
+      "1:09.697"
+     ]
+    ]
+   },
+   {
+    "id": "nz",
+    "name": "New Zealand",
+    "author": "1:04.000",
+    "pbs": [
+     [
+      "Melioo",
+      "1:01.370"
+     ],
+     [
+      "Mime",
+      "1:01.422"
+     ],
+     [
+      "Epos",
+      "1:01.452"
+     ],
+     [
+      "eLconn21",
+      "1:01.537"
+     ],
+     [
+      "Binkss",
+      "1:01.588"
+     ],
+     [
+      "Gwen",
+      "1:01.645"
+     ],
+     [
+      "Walegen",
+      "1:01.804"
+     ],
+     [
+      "Nabla",
+      "1:01.958"
+     ]
+    ]
+   }
+  ]
+ }
+}
