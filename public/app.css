@@ -350,17 +350,17 @@ img.lg{width:34px;height:34px;object-fit:contain;vertical-align:middle;filter:dr
 /* ---------- road so far: tournament journey ---------- */
 .jr{position:absolute;inset:0}
 .jr [data-r]{animation-delay:var(--d,0ms)!important}
-.jr-title{position:absolute;left:0;right:0;top:122px;text-align:center}
-.jr-title .lbl{display:block;color:var(--ink);font-size:20px;margin-bottom:6px;text-shadow:0 2px 6px rgba(0,0,0,.6)}
-.jr-title .d-m{display:inline-block;padding:4px 26px;background:var(--grad);clip-path:polygon(16px 0,100% 0,calc(100% - 16px) 100%,0 100%);font-size:56px}
-.jr-head{position:absolute;top:150px;width:720px;display:flex;align-items:center;gap:26px}
+.jr-title{position:absolute;left:0;right:0;top:78px;text-align:center}
+.jr-title .lbl{display:block;color:var(--ink);font-size:18px;margin-bottom:4px;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.jr-title .d-m{display:inline-block;padding:4px 26px;background:var(--grad);clip-path:polygon(16px 0,100% 0,calc(100% - 16px) 100%,0 100%);font-size:50px}
+.jr-head{position:absolute;top:196px;width:790px;display:flex;align-items:center;gap:26px}
 .jr-head.L{left:var(--safe)}.jr-head.R{right:var(--safe);flex-direction:row-reverse;text-align:right}
-.jr-head .tlogo{width:150px;height:150px}
+.jr-head .tlogo{width:140px;height:140px;flex:none}
 .jr-hb{min-width:0;flex:1}
 .jr-chips{display:flex;gap:8px;margin-bottom:6px}.jr-head.R .jr-chips{justify-content:flex-end}
 .jr-chip{padding:3px 10px;background:rgba(0,0,0,.55);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);font:800 italic 14px/1.2 'Montserrat';letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
 .jr-chip.hot{background:var(--grad);box-shadow:none}
-.jr-name{font-family:'Anton';font-size:66px;line-height:1;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:470px;text-shadow:0 4px 14px rgba(0,0,0,.5)}
+.jr-name{font-family:'Anton';font-size:66px;line-height:1.05;text-transform:uppercase;white-space:nowrap;overflow:hidden;max-width:100%;text-shadow:0 4px 14px rgba(0,0,0,.5)}
 .jr-head.R .jr-name{margin-left:auto}
 .jr-stats{display:flex;gap:24px;margin-top:8px}.jr-head.R .jr-stats{justify-content:flex-end}
 .jr-stats div{display:flex;flex-direction:column}
@@ -380,7 +380,7 @@ img.lg{width:34px;height:34px;object-fit:contain;vertical-align:middle;filter:dr
 .jr-col.R .jr-opp{flex-direction:row-reverse}
 .jr-opp small{font:800 italic 14px 'Montserrat';letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
 .jr-opp .tlogo{width:calc(var(--rh) * .56);height:calc(var(--rh) * .56)}
-.jr-opp b{font-family:'Anton';font-weight:400;font-size:calc((var(--rh) * .3 + 8px) * var(--fit,1));line-height:1;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jr-opp b{flex:1;min-width:0;font-family:'Anton';font-weight:400;font-size:calc(var(--rh) * .3 + 8px);line-height:1.1;text-transform:uppercase;white-space:nowrap;overflow:hidden}
 .jr-sc{width:calc(var(--rh) * .9 + 20px);flex:none;display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:calc(var(--rh) * .5 + 6px);line-height:1}
 .jr-sc i{font-style:normal;color:var(--faint);margin:0 .08em}.jr-sc small{font-size:.45em;margin-left:.15em;color:var(--dim)}
 .jr-row.lost .jr-sc{color:var(--dim)}
@@ -399,13 +399,13 @@ img.lg{width:34px;height:34px;object-fit:contain;vertical-align:middle;filter:dr
 .view.in .jr-dot{opacity:0;animation:fadein .35s ease var(--d) forwards}
 .view.settled .jr-spine{animation:none;stroke-dasharray:none;stroke-dashoffset:0}.view.settled .jr-dot{animation:none;opacity:1}
 @keyframes jrdraw{to{stroke-dashoffset:0}}
-.jr-now{position:absolute;left:560px;width:800px;top:840px;text-align:center}
+.jr-now{position:absolute;left:440px;width:1040px;top:836px;text-align:center}
 .jr-now-k{display:inline-block;padding:2px 14px;background:#fff;color:#140806;font:900 italic 15px/1.3 'Montserrat';letter-spacing:.16em;text-transform:uppercase;position:relative;z-index:1;margin-bottom:-4px}
-.jr-now-b{display:flex;align-items:center;justify-content:center;gap:26px;height:84px;padding:0 26px;background:var(--panel);border-top:4px solid var(--accent);box-shadow:0 0 0 1px rgba(255,59,31,.4),0 0 40px rgba(255,59,31,.35)}
-.jr-now-b .tlogo{width:62px;height:62px}
-.jr-now-m{display:flex;flex-direction:column;align-items:center;min-width:300px}
-.jr-now-m b{font-family:'Anton';font-weight:400;font-size:40px;line-height:1;text-transform:uppercase}
-.jr-now-m span{font:800 italic 16px 'Montserrat';letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+.jr-now-b{display:flex;align-items:center;justify-content:center;gap:32px;height:100px;padding:0 32px;background:var(--panel);border-top:4px solid var(--accent);box-shadow:0 0 0 1px rgba(255,59,31,.4),0 0 40px rgba(255,59,31,.35)}
+.jr-now-b .tlogo{width:76px;height:76px;flex:none}
+.jr-now-m{display:flex;flex-direction:column;align-items:center;min-width:0;max-width:760px}
+.jr-now-m b{max-width:100%;font-family:'Anton';font-weight:400;font-size:50px;line-height:1.05;text-transform:uppercase;white-space:nowrap;overflow:hidden}
+.jr-now-m span{font:800 italic 18px 'Montserrat';letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:4px}
 .view.in .jr-now{animation-name:jrnow!important;animation-duration:.8s!important}
 .view.in .jr-now .jr-now-b{animation:jrglow 1.6s ease var(--d) 1}
 @keyframes jrnow{from{opacity:0;scale:.9}to{opacity:1;scale:1}}
@@ -730,3 +730,84 @@ img.lg{width:34px;height:34px;object-fit:contain;vertical-align:middle;filter:dr
 
 /* names set in Anton (the old .nm class is italic Montserrat) */
 .h2-t .nm,.rs-t .nm,.ti2-pn .nm{font-style:normal;font-weight:400}
+
+.jr-hb{min-width:0;flex:1;overflow:hidden}
+.jr-rd b{overflow:hidden;max-width:100%}
+.jr-head.R .jr-name{text-align:right}
+
+/* ---------- analyst & caster desk pieces ---------- */
+.dp-scr{margin-left:auto;font-family:'Anton';font-size:110px;line-height:1;color:#fff}
+.dp-team.R .dp-scr{margin-left:0;margin-right:auto}
+.dp-team.v .dp-scr{margin:0;font-size:150px}
+.dp-path{flex:1;display:flex;flex-direction:column;gap:10px;padding:14px 20px;background:var(--panel);border-top:4px solid var(--accent);box-shadow:0 14px 34px rgba(0,0,0,.4);min-width:0}
+.dp-ph{display:flex;align-items:center;gap:12px;white-space:nowrap}.dp-ph .tlogo{width:40px;height:40px}
+.dp-ph b{font-family:'Anton';font-weight:400;font-size:32px;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis}.dp-ph span{margin-left:auto;font-family:'Anton';font-size:32px;color:var(--accent)}
+.dp-chips{flex:1;display:flex;gap:6px;min-height:0}
+.dp-chip{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);padding:4px}
+.dp-chip span{font:800 italic 11px 'Montserrat';letter-spacing:.08em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.dp-chip .tlogo{width:30px;height:30px}.dp-chip b{font-family:'Anton';font-weight:400;font-size:26px;line-height:1}
+.dp-chip i{font:900 italic 11px 'Montserrat';letter-spacing:.1em;text-transform:uppercase}
+.dp-chip.w{box-shadow:inset 0 -4px 0 var(--accent)}.dp-chip.w i{color:var(--accent)}.dp-chip.l{opacity:.7}
+.dp-chip.first b{font-size:24px;text-transform:uppercase;color:var(--dim)}
+.dp-w.solo .dp-path{padding:18px}.dp-w.solo .dp-ph{flex-wrap:wrap}.dp-w.solo .dp-chips{flex-direction:column}
+.dp-w.solo .dp-chip{flex-direction:row;justify-content:flex-start;gap:12px;padding:0 14px}.dp-w.solo .dp-chip b{margin-left:auto;font-size:34px}
+.dp-sk{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 30px;background:var(--panel);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.dp-sk.go{border-top:5px solid var(--go)}.dp-sk.stop{border-top:5px solid var(--stop)}
+.dp-sk .k{font:900 italic 16px 'Montserrat';letter-spacing:.16em;text-transform:uppercase}.dp-sk.go .k{color:var(--go)}.dp-sk.stop .k{color:var(--stop)}
+.dp-sk b{font-family:'Anton';font-weight:400;font-size:44px;line-height:1.05;text-transform:uppercase}
+.dp-sk.out b{color:var(--stop)}
+.dp-sk i{font:800 italic 19px 'Montserrat';text-transform:uppercase;color:var(--dim)}
+.dp-w.solo .dp-sk{padding:24px 20px;justify-content:flex-start}.dp-w.solo .dp-sk b{font-size:48px}
+.dp-pl{flex:1;display:flex;gap:20px;align-items:stretch;background:var(--panel);border-top:4px solid var(--accent);box-shadow:0 14px 34px rgba(0,0,0,.4);overflow:hidden;min-width:0}
+.dp-pl>.phx{width:200px;height:auto;flex:none}
+.dp-plb{display:flex;flex-direction:column;justify-content:center;min-width:0;padding-right:20px}
+.dp-earn{margin-top:8px}.dp-earn span{display:block;font:800 italic 12px 'Montserrat';letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}.dp-earn b{font-family:'Anton';font-weight:400;font-size:38px;color:var(--accent);line-height:1}
+.dp-w.solo .dp-pl{flex-direction:column;gap:0}.dp-w.solo .dp-pl>.phx{width:100%;height:330px}.dp-w.solo .dp-plb{padding:16px 18px}.dp-w.solo .dp-pl .dp-nm{font-size:46px;white-space:normal}
+.dp-ach{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 24px;background:var(--panel);border-top:4px solid var(--accent);box-shadow:0 14px 34px rgba(0,0,0,.4);min-width:0}
+.dp-ach .r{display:flex;gap:14px;align-items:baseline;white-space:nowrap;overflow:hidden;font-size:22px;line-height:1.45}
+.dp-ach .r b{font:900 italic 22px 'Montserrat';text-transform:uppercase;color:var(--accent);flex:none}.dp-ach .r span{font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.dp-ach .src{font:700 italic 12px 'Montserrat';color:var(--faint);margin-top:4px}
+.dp-w.solo .dp-ach{justify-content:flex-start;padding:20px 18px}.dp-w.solo .dp-ach .r{flex-direction:column;gap:0;white-space:normal;padding:6px 0;border-top:1px solid rgba(255,255,255,.07);font-size:18px;line-height:1.25}
+.dp-story{flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:0 30px;background:var(--panel);border-left:5px solid var(--accent);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.dp-story b{font:900 italic 27px/1.22 'Montserrat';text-transform:none}.dp-story span{font:700 italic 13px 'Montserrat';color:var(--faint)}
+.dp-w.solo .dp-story{padding:20px 18px}.dp-w.solo .dp-story b{font-size:24px}
+.dp-mapc{flex:1;position:relative;background:#120a08 center/cover;border-top:4px solid var(--accent);box-shadow:0 14px 34px rgba(0,0,0,.4);overflow:hidden}
+.dp-mapc .ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:14px 22px;background:linear-gradient(180deg,rgba(14,7,6,0) 20%,rgba(14,7,6,.92))}
+.dp-mapc span{font:900 italic 15px 'Montserrat';letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.dp-mapc b{font-family:'Anton';font-weight:400;font-size:54px;line-height:1;text-transform:uppercase}.dp-mapc i{font:800 italic 17px 'Montserrat';text-transform:uppercase;color:var(--dim)}
+.dp-games{flex:1;display:flex;gap:6px;min-width:0}
+.dp-g{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px;background:linear-gradient(180deg,rgba(14,7,6,.35),rgba(14,7,6,.95)),var(--img,none) center/cover,var(--panel);box-shadow:inset 0 0 0 1px var(--line)}
+.dp-g span{font:900 italic 12px 'Montserrat';letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.dp-g b{font-family:'Anton';font-weight:400;font-size:24px;line-height:1.1;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dp-g i{display:flex;align-items:center;gap:6px;font:900 italic 15px 'Montserrat';text-transform:uppercase}.dp-g i .tlogo{width:24px;height:24px}
+.dp-g.done{box-shadow:inset 0 -4px 0 var(--accent)}.dp-g.now{box-shadow:inset 0 0 0 3px var(--accent)}.dp-g.now span{color:var(--accent)}
+.dp-w.solo .dp-games{flex-direction:column}.dp-w.solo .dp-g{padding:8px 14px}
+.dp-ser{flex:1;display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;background:var(--panel);border-top:4px solid var(--accent);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.dp-ser .tlogo{width:84px;height:84px}.dp-ser b{font-family:'Anton';font-weight:400;font-size:104px;line-height:1}.dp-ser b.lo{color:rgba(255,255,255,.4)}.dp-ser i{font-style:normal;font-family:'Anton';font-size:70px;color:var(--accent)}
+.dp-ser .ft{flex-basis:100%;text-align:center;font:900 italic 16px 'Montserrat';letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+
+.dk-tag{position:absolute;left:52px;top:58px;z-index:6;padding:9px 26px 9px 20px;background:#140806;font:900 italic 21px/1.2 'Montserrat';letter-spacing:.04em;text-transform:uppercase;color:#fff;clip-path:polygon(0 0,100% 0,calc(100% - 12px) 100%,0 100%);box-shadow:inset 4px 0 0 var(--accent)}
+/* series score in the dual band: one line */
+.dp-w.duo .dp-ser{flex-wrap:nowrap;position:relative;gap:26px}.dp-w.duo .dp-ser .tlogo{width:76px;height:76px}.dp-w.duo .dp-ser b{font-size:96px}
+
+/* road-so-far chips: round on top, opponent logo and score on one line */
+.dp-chip{justify-content:center;gap:6px;padding:6px 8px}
+.dp-chip span{font-size:12px}
+.dp-chip .ln{display:flex;align-items:center;gap:10px}.dp-chip .ln .tlogo{width:38px;height:38px}.dp-chip .ln b{font-size:36px}
+.dp-chip.w{box-shadow:inset 0 -5px 0 var(--accent)}.dp-chip.l{opacity:.6;box-shadow:inset 0 -5px 0 rgba(255,255,255,.15)}
+.dp-w.solo .dp-chip{flex-direction:column;align-items:flex-start;justify-content:center;padding:8px 14px}.dp-w.solo .dp-chip .ln{width:100%}.dp-w.solo .dp-chip .ln b{margin-left:auto}
+.dp-mapc .ov{background:linear-gradient(180deg,rgba(14,7,6,.15),rgba(14,7,6,.95) 70%)}
+
+.dp-ser{flex-direction:row!important;flex-wrap:nowrap!important;position:relative;gap:20px!important}
+.dp-ser .sd{display:flex;align-items:center;gap:18px}
+.dp-ser .ft{position:absolute;left:0;right:0;bottom:8px;font-size:13px}
+.dp-w.solo .dp-ser{flex-direction:column!important;gap:10px!important}
+.dp-w.solo .dp-ser .sd{flex-direction:column;gap:6px}.dp-w.solo .dp-ser .sd.R{flex-direction:column-reverse}
+.dp-w.solo .dp-ser b{font-size:120px}.dp-w.solo .dp-ser .ft{position:static;margin-top:8px}
+
+/* caster desk trio: header above, a two-wing band under the three cameras */
+.dp-head.trio{top:150px}
+.dp-w.trio{top:792px;height:158px;width:864px}.dp-w.trio.A{left:73px}.dp-w.trio.B{left:983px}
+.dp-w.trio .dp-ser{flex-wrap:nowrap;position:relative;gap:26px}.dp-w.trio .dp-ser .tlogo{width:76px;height:76px}.dp-w.trio .dp-ser b{font-size:96px}
+.dlt.trio b{font-size:34px}.dlt.trio span{font-size:13px}

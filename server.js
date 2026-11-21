@@ -47,7 +47,7 @@ const flushAll = () => Object.keys(pending).forEach(flushOne);
 for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) process.on(sig, () => { flushAll(); process.exit(0); });
 process.on("exit", flushAll);
 
-const DESK_VIEWS = ["clean", "upcoming", "stats", "others", "pred"];
+const DESK_VIEWS = ["clean", "upcoming", "stats", "path", "stakes", "player", "pred", "story", "series", "map", "maps", "others"];
 const BLANK = () => ({
   settings: { ...DEFAULT_SETTINGS },
   overrides: { matches: {} },
@@ -66,6 +66,11 @@ const BLANK = () => ({
   desk: { layout: "duo", solo: "c1", mode: "integrated", bg: true, cams: true, frames: true, plates: true, decor: true, preload: true },
   // what the desk shows around the cameras: clean | upcoming | stats | others | pred (preview → Take → live)
   deskShow: { preview: "clean", live: "clean", lt: false },
+  // Pre-show / Analyst Desk: a second, fully independent desk scene sharing the same two cameras and caster names
+  adesk: { layout: "duo", solo: "c1", mode: "integrated", bg: true, cams: true, frames: true, plates: true, decor: true, preload: true },
+  adeskShow: { preview: "clean", live: "clean", lt: false },
+  // map log entered on the Caster Desk tab: matchId → [{ map, winner }] per game (the sheet only carries series scores)
+  mapLog: {},
   casters: [{ id: "c1", name: "", role: "", handle: "", crop: { x: 0, y: 0, zoom: 1 } }, { id: "c2", name: "", role: "", handle: "", crop: { x: 0, y: 0, zoom: 1 } }],
   deskProfiles: { solo: ["c1"], duo: ["c1", "c2"] },
   pred: { visible: false, matchId: null, byMatch: {} },
@@ -83,8 +88,19 @@ S.settings = Object.assign({ ...DEFAULT_SETTINGS }, S.settings);
 for (const k of Object.keys(BLANK())) if (S[k] === undefined) S[k] = BLANK()[k];
 for (const [k, v] of Object.entries(BLANK().scenes)) if (!S.scenes[k]) S.scenes[k] = v;
 for (const id of ["c1", "c2"]) if (!S.casters.some(c => c.id === id)) S.casters.push(BLANK().casters.find(c => c.id === id));
+// Caster Desk cameras (m1–m3) are separate from the Analyst Desk cameras (c1, c2). First start: copy c1/c2 across.
+const MIDS = ["m1", "m2", "m3"], CIDS = ["c1", "c2"];
+const MIGRATE_CAMS = !Array.isArray(S.mcasters);
+if (!Array.isArray(S.mcasters)) S.mcasters = MIDS.map((id, i) => { const src = S.casters.find(c => c.id === CIDS[i]); return Object.assign({ id, name: "", role: "", handle: "", crop: { x: 0, y: 0, zoom: 1 } }, src ? JSON.parse(JSON.stringify(src)) : {}, { id }); });
+for (const id of MIDS) if (!S.mcasters.some(c => c.id === id)) S.mcasters.push({ id, name: "", role: "", handle: "", crop: { x: 0, y: 0, zoom: 1 } });
+if (!["solo", "duo", "trio"].includes(S.desk.layout)) S.desk.layout = "duo";
+if (!MIDS.includes(S.desk.solo)) S.desk.solo = "m1";
 delete S.mu;
-const syncProfiles = () => { S.deskProfiles = { solo: [S.desk.solo === "c2" ? "c2" : "c1"], duo: ["c1", "c2"] }; if (!["solo", "duo"].includes(S.desk.layout)) S.desk.layout = "duo"; };
+const syncProfiles = () => {
+  S.deskProfiles = { solo: [["m1", "m2", "m3"].includes(S.desk.solo) ? S.desk.solo : "m1"], duo: ["m1", "m2"], trio: ["m1", "m2", "m3"] }; if (!["solo", "duo", "trio"].includes(S.desk.layout)) S.desk.layout = "duo";
+  S.adeskProfiles = { solo: [S.adesk.solo === "c2" ? "c2" : "c1"], duo: ["c1", "c2"] }; if (!["solo", "duo"].includes(S.adesk.layout)) S.adesk.layout = "duo"; };
+// desk actions take d: "analyst" for the Analyst Desk; anything else is the Caster Desk
+const deskOf = a => a && a.d === "analyst" ? [S.adesk, S.adeskShow] : [S.desk, S.deskShow];
 syncProfiles();
 // verified reference data (shipped with the project, see data/verified.json)
 let VERIFIED = {};
@@ -101,6 +117,7 @@ function scanAssets() {
 }
 scanAssets();
 let PRIV = Object.assign({ casters: {}, obs: { url: "ws://127.0.0.1:4455", password: "" } }, readJSON("private.json", {}));
+if (MIGRATE_CAMS) { let ch = false; CIDS.forEach((c, i) => { if (PRIV.casters[c] && !PRIV.casters[MIDS[i]]) { PRIV.casters[MIDS[i]] = Object.assign({}, PRIV.casters[c]); ch = true; } }); if (ch) setTimeout(() => savePriv(), 0); }
 let privRev = Date.now();
 
 // seed facts once (verified, sourced; the producer can delete them)
@@ -411,7 +428,7 @@ const ACTIONS = {
   "gp.hide": () => { S.gp.live = null; },
   "gp.pos": a => { const p = a.pos || {}; S.gp.pos = { preset: ["bl", "br", "tr", "tl", "ml", "bc"].includes(p.preset) ? p.preset : "bl",
     dx: Math.max(-800, Math.min(800, +p.dx || 0)), dy: Math.max(-600, Math.min(600, +p.dy || 0)) }; if (a.scale) S.gp.scale = Math.max(.6, Math.min(1.5, +a.scale)); },
-  "editorial.clear": () => { S.gp.live = null; S.pred.visible = false; S.deskShow.live = "clean"; S.deskShow.lt = false; },
+  "editorial.clear": () => { S.gp.live = null; S.pred.visible = false; S.deskShow.live = "clean"; S.deskShow.lt = false; S.adeskShow.live = "clean"; S.adeskShow.lt = false; },
   // full-screen sources: preview, take, background
   "scene.set": a => {
     const sc = S.scenes[a.scene]; if (!sc) throw new Error("unknown scene");
@@ -421,21 +438,27 @@ const ACTIONS = {
   "scene.take": a => { const sc = S.scenes[a.scene]; if (!sc) throw new Error("unknown scene"); sc.live = JSON.parse(JSON.stringify(sc.preview)); sc.live.at = Date.now(); },
   "scene.bg": a => { const sc = S.scenes[a.scene]; if (!sc) throw new Error("unknown scene"); sc.bg = !!a.on; },
   // caster desk
-  "desk.preview": a => { if (DESK_VIEWS.includes(a.view)) S.deskShow.preview = a.view; },
-  "desk.take": () => { const v = S.deskShow.preview; S.deskShow.live = v;
+  "desk.preview": a => { const [, SH] = deskOf(a); if (DESK_VIEWS.includes(a.view)) { SH.preview = a.view; if (a.view === "player") SH.ppid = clampStr(a.pid || "", 40); } },
+  "desk.take": a => { const [, SH] = deskOf(a), v = SH.preview; SH.live = v; SH.lpid = SH.ppid || null;
     // taking the predictions reveals every saved pick for the broadcast match
     if (v === "pred" && S.active && S.pred.byMatch[S.active]) for (const p of Object.values(S.pred.byMatch[S.active].picks)) if (p.team) p.revealed = true; },
-  "desk.hide": () => { S.deskShow.live = "clean"; },
-  "desk.lt": a => { S.deskShow.lt = !!a.on; },
-  "desk.set": a => { for (const k of ["layout", "mode", "solo"]) if (a[k]) S.desk[k] = clampStr(a[k], 20); for (const k of ["bg", "cams", "frames", "plates", "decor", "preload"]) if (k in a) S.desk[k] = !!a[k]; syncProfiles(); },
+  "map.set": a => { const mid = clampStr(a.matchId || "", 40), g = +a.game; if (!mid || !(g >= 1 && g <= 9)) throw new Error("bad game");
+    const log = S.mapLog[mid] = S.mapLog[mid] || []; while (log.length < g) log.push({});
+    if ("map" in a) log[g - 1].map = a.map ? clampStr(a.map, 40) : null;
+    if ("winner" in a) log[g - 1].winner = a.winner ? clampStr(a.winner, 40) : null; },
+  "map.clear": a => { delete S.mapLog[clampStr(a.matchId || "", 40)]; },
+  "desk.hide": a => { deskOf(a)[1].live = "clean"; },
+  "desk.lt": a => { deskOf(a)[1].lt = !!a.on; },
+  "desk.set": a => { const [D] = deskOf(a); for (const k of ["layout", "mode", "solo"]) if (a[k]) D[k] = clampStr(a[k], 20); for (const k of ["bg", "cams", "frames", "plates", "decor", "preload"]) if (k in a) D[k] = !!a[k]; syncProfiles(); },
   "caster.save": a => {
-    const c = a.caster || {}; const id = c.id; if (!["c1", "c2"].includes(id)) throw new Error("only cameras c1 and c2 exist");
+    const c = a.caster || {}; const id = c.id; if (![...CIDS, ...MIDS].includes(id)) throw new Error("unknown camera");
+    const LIST = MIDS.includes(id) ? S.mcasters : S.casters;
     const pub = { id, name: clampStr(c.name, 40), role: clampStr(c.role, 40), handle: clampStr(c.handle, 40),
       crop: { x: +((c.crop || {}).x) || 0, y: +((c.crop || {}).y) || 0, zoom: Math.max(1, Math.min(4, +((c.crop || {}).zoom) || 1)) } };
-    const i = S.casters.findIndex(x => x.id === id); if (i >= 0) S.casters[i] = pub; else S.casters.push(pub);
+    const i = LIST.findIndex(x => x.id === id); if (i >= 0) LIST[i] = pub; else LIST.push(pub);
     if ("vdo" in c) { PRIV.casters[id] = { vdo: clampStr(c.vdo, 600) }; savePriv(); }
   },
-  "caster.clear": a => { const c = S.casters.find(x => x.id === a.id); if (c) Object.assign(c, { name: "", role: "", handle: "", crop: { x: 0, y: 0, zoom: 1 } }); delete PRIV.casters[a.id]; savePriv(); },
+  "caster.clear": a => { const c = S.casters.concat(S.mcasters).find(x => x.id === a.id); if (c) Object.assign(c, { name: "", role: "", handle: "", crop: { x: 0, y: 0, zoom: 1 } }); delete PRIV.casters[a.id]; savePriv(); },
 
   "obs.save": a => { PRIV.obs = { url: clampStr(a.url, 200), password: clampStr(a.password, 200) }; savePriv(); },
   // predictions, saved against the match id

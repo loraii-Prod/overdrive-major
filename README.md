@@ -24,7 +24,8 @@ Use **3840×2160** for native 4K or **1920×1080** for 1080p; the address is the
 | Source | Address | States inside it |
 |---|---|---|
 | Starting soon / BRB / Ending | `/#waiting` | title, break countdown, next-match countdown, rotating info |
-| Caster desk | `/#desk` (add `&key=…` if a key is set) | solo or dual camera, integrated or local OBS cameras; clean, upcoming matchup, tournament stats, other matches, predictions; optional lower thirds |
+| Pre-show / Analyst desk | `/#analyst` (add `&key=…` if a key is set) | producer tab F4 · analyst desk loops (desk-solo, desk-duo), its own two cameras, names and VDO links · matchup, team comparison, road so far, what's at stake, player spotlight, predictions, storylines |
+| Match / Caster desk | `/#desk` (add `&key=…` if a key is set) | producer tab F5 · its own "Casters booth" loops (brand/caster-duo.webm, caster-trio.webm), its own three cameras, names and VDO links (Cameras & names on that tab), solo / dual / trio · series score, map info, map results and series progression (from the map log on that tab), other matches |
 | Matchup / team introduction | `/#matchup` | versus, team A intro, team B intro, head to head, road so far, what's at stake |
 | Player information | `/#player` | profile of any of the four players, two comparisons |
 | Bracket / tournament overview | `/` or `/#bracket` | bracket, match schedule |

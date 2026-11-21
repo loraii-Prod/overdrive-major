@@ -14,8 +14,8 @@ const GNAME = { player: "Spotlight", achievements: "Achievements", career: "Rece
 const gname = g => { if (!g) return ""; const M = OD.M, p = g.params || {};
   return (GNAME[g.type] || g.type) + (p.pid && M.player(p.pid) ? " · " + M.player(p.pid).name : p.tid ? " · " + OD.tname(p.tid) : p.id && g.type === "map" ? " · " + ((M.maps().find(m => m.id === p.id) || {}).name || "") : ""); };
 P.gname = gname;
-const PAGES = [["overview", "Overview", "F1"], ["gameplay", "Gameplay", "F2"], ["matchup", "Matchup", "F3"], ["desk", "Caster Desk", "F4"],
-  ["predictions", "Predictions", "F5"], ["breaks", "Breaks", "F6"], ["bracket", "Bracket", "F7"], ["settings", "Settings", "F8"]];
+const PAGES = [["overview", "Overview", "F1"], ["gameplay", "Gameplay", "F2"], ["matchup", "Matchup", "F3"], ["analyst", "Analyst Desk", "F4"], ["desk", "Caster Desk", "F5"],
+  ["predictions", "Predictions", "F6"], ["breaks", "Breaks", "F7"], ["bracket", "Bracket", "F8"], ["settings", "Settings", "F9"]];
 const tm = id => { const M = OD.M, t = M && M.team(id); if (!t) return ""; const src = OD.logoSrc(id);
   return `<span class="tm">${src ? `<img src="${esc(src)}" alt="">` : `<span class="mono">${esc(t.short)}</span>`}<span>${esc(t.name)}</span></span>`; };
 const logoImg = id => OD.logoSrc(id) ? `<img src="${esc(OD.logoSrc(id))}" alt="">` : "";
@@ -35,7 +35,7 @@ P.init = () => {
   try { const p = localStorage.getItem("od_major_page"); if (PAGES.some(x => x[0] === p)) P.page = p; } catch (e) {}
   if (location.hash.includes("page=")) { const p = (/page=(\w+)/.exec(location.hash) || [])[1]; if (PAGES.some(x => x[0] === p)) P.page = p; }
   OD.onState(s => {
-    if (s.privRev !== P.privRev) { P.privRev = s.privRev; OD.getPrivate().then(p => { P.priv = p; if (P.page === "desk" || P.page === "settings") mount(); }); }
+    if (s.privRev !== P.privRev) { P.privRev = s.privRev; OD.getPrivate().then(p => { P.priv = p; if (P.page === "desk" || P.page === "analyst" || P.page === "settings") mount(); }); }
     if (!document.getElementById("main")) mount(); else update();
   });
   setInterval(() => { if (OD.S) update(); }, 1000);
@@ -69,15 +69,17 @@ function statusBar(s, M) {
   const r = M.active, src = s.sources.major, d = s.desk;
   const dataBad = !OD.online, dataWarn = src.ok === false;
   const dataTxt = dataBad ? "Server offline" : dataWarn ? `Cached · ${OD.ago(src.at)}` : `Live · ${OD.ago(src.at)}`;
-  const named = (s.casters || []).filter(c => c.name).length, links = ["c1", "c2"].filter(id => P.priv && ((P.priv.casters || {})[id] || {}).vdo).length;
-  const need = d.layout === "solo" ? 1 : 2;
+  // Caster Desk (the match scene) cameras
+  const inShot = (s.deskProfiles || {})[d.layout] || [], need = inShot.length || 1;
+  const named = (s.mcasters || []).filter(c => c.name && inShot.includes(c.id)).length, links = inShot.filter(id => P.priv && ((P.priv.casters || {})[id] || {}).vdo).length;
   const camOk = d.mode === "local" ? "off" : (named >= need && (!P.priv || links >= need)) ? "" : "amb";
   const rd = M.readiness(), blocks = rd.filter(x => x.level === "block").length, warns = rd.filter(x => x.level === "warn").length;
   const air = [];
   if (s.gp.live) { const left = s.gp.live.until ? Math.max(0, Math.ceil((s.gp.live.until - OD.now()) / 1000)) + "s" : "hold"; air.push(`<span class="tag pgm">GFX · ${esc(gname(s.gp.live))} · ${left}</span>`); }
   if (s.pred.visible) air.push(`<span class="tag pgm">Predictions</span>`);
-  if (s.deskShow.live !== "clean") air.push(`<span class="tag pgm">Desk · ${esc(SC.DESK_VIEWS[s.deskShow.live])}</span>`);
-  if (s.deskShow.lt) air.push(`<span class="tag pgm">Lower thirds</span>`);
+  if (s.adeskShow.live !== "clean") air.push(`<span class="tag pgm">Analyst · ${esc(SC.DESK_VIEWS[s.adeskShow.live])}</span>`);
+  if (s.deskShow.live !== "clean") air.push(`<span class="tag pgm">Caster desk · ${esc(SC.DESK_VIEWS[s.deskShow.live])}</span>`);
+  if (s.deskShow.lt || s.adeskShow.lt) air.push(`<span class="tag pgm">Lower thirds</span>`);
   if (s.sim.on) air.push(`<span class="tag amb">Simulation</span>`);
   if (P.obs && P.obs.ok && P.obs.scene) air.push(`<span class="tag">OBS · ${esc(P.obs.scene)}</span>`);
   return `<div class="brand"><img src="${esc(OD.eventLogo() || "")}" alt="OverDrive"></div>
@@ -86,13 +88,13 @@ function statusBar(s, M) {
     <div class="kv2"><small>Stage</small><span>${r ? esc(r.round) + " · Bo" + esc(r.bo) : "—"}</span></div>
     <div class="kv2 opt"><small>${r && (r.status === "live" || r.winner) ? "Score" : "Start"}</small><span>${r ? (r.status === "live" || r.winner ? esc(r.s1 || 0) + "–" + esc(r.s2 || 0) : esc(OD.time(r.at)) + " CET") : "—"}</span></div>
     <div class="kv2"><small>Major data</small><span><i class="dot ${dataBad ? "bad" : dataWarn ? "amb" : ""}"></i>${esc(dataTxt)}</span></div>
-    <div class="kv2"><small>Cameras</small><span><i class="dot ${camOk}"></i>${d.mode === "local" ? "Local OBS" : "Integrated"} · ${d.layout === "solo" ? "Solo" : "Dual"}</span></div>
+    <div class="kv2"><small>Caster desk cams</small><span><i class="dot ${camOk}"></i>${d.mode === "local" ? "Local OBS" : "Integrated"} · ${d.layout === "solo" ? "Solo" : d.layout === "trio" ? "Trio" : "Dual"}</span></div>
     <button class="kv2 rdy" data-go="overview"><small>Match</small><span><i class="dot ${blocks ? "bad" : warns ? "amb" : ""}"></i>${blocks ? "Not ready" : warns ? warns + " to check" : "Ready"}</span></button>
     <div class="grow air">${air.join("") || `<span class="tag">Nothing on air</span>`}</div>
-    <div class="clear"><button class="btn-clear" data-act="editorial.clear" data-p="{}" title="Hide every editorial graphic, the predictions, the desk information and lower thirds">Clear graphics <kbd>Esc</kbd></button></div>`;
+    <div class="clear"><button class="btn-clear" data-act="editorial.clear" data-p="{}" title="Hide every editorial graphic, the predictions, both desks' information and lower thirds">Clear graphics <kbd>Esc</kbd></button></div>`;
 }
 function navHTML(s) {
-  return PAGES.map(([k, l, f]) => `<a class="${P.page === k ? "on" : ""}" data-go="${k}" href="#control" role="button"><span>${l}</span>${k === "gameplay" && s.gp.live ? `<span class="n">ON</span>` : k === "predictions" && s.pred.visible ? `<span class="n">ON</span>` : k === "desk" && (s.deskShow.live !== "clean" || s.deskShow.lt) ? `<span class="n">ON</span>` : `<kbd>${f}</kbd>`}</a>`).join("")
+  return PAGES.map(([k, l, f]) => `<a class="${P.page === k ? "on" : ""}" data-go="${k}" href="#control" role="button"><span>${l}</span>${k === "gameplay" && s.gp.live ? `<span class="n">ON</span>` : k === "predictions" && s.pred.visible ? `<span class="n">ON</span>` : k === "desk" && (s.deskShow.live !== "clean" || s.deskShow.lt) ? `<span class="n">ON</span>` : k === "analyst" && (s.adeskShow.live !== "clean" || s.adeskShow.lt) ? `<span class="n">ON</span>` : `<kbd>${f}</kbd>`}</a>`).join("")
     + `<div class="sp"></div><div class="foot">${esc(location.host)}<br>${OD.online ? "connected" : "reconnecting…"}</div>`;
 }
 
@@ -153,9 +155,10 @@ P.suggestions = (s, M) => {
 
 /* ================================================================== pages */
 const VIEWS = {};
-const OUTPUTS = [["waiting", "Breaks", "waiting"], ["desk&preview&pgm", "Desk", "desk"], ["matchup", "Matchup", "matchup"], ["player", "Player", "player"], ["bracket", "Bracket", "bracket"],
+const OUTPUTS = [["waiting", "Breaks", "waiting"], ["analyst&preview&pgm", "Analyst desk", "analyst"], ["desk&preview&pgm", "Caster desk", "desk"], ["matchup", "Matchup", "matchup"], ["player", "Player", "player"], ["bracket", "Bracket", "bracket"],
   ["predictions", "Predictions", "predictions"], ["maps", "Maps", "maps"], ["gameplay", "Gameplay", "gameplay"], ["postmatch", "Post-match", "post"]];
-const outState = (k, s) => ({ waiting: s.brk.title || "No title", desk: (s.desk.layout === "solo" ? "Solo" : "Dual") + " · " + SC.DESK_VIEWS[s.deskShow.live],
+const outState = (k, s) => ({ waiting: s.brk.title || "No title", desk: (s.desk.layout === "solo" ? "Solo" : s.desk.layout === "trio" ? "Trio" : "Dual") + " · " + SC.DESK_VIEWS[s.deskShow.live],
+  analyst: (s.adesk.layout === "solo" ? "Solo" : "Dual") + " · " + SC.DESK_VIEWS[s.adeskShow.live],
   matchup: s.scenes.matchup.live.view, player: s.scenes.player.live.view, bracket: s.scenes.bracket.live.view, predictions: s.pred.visible ? "Visible" : "Hidden",
   maps: s.scenes.maps.live.view, gameplay: s.gp.live ? gname(s.gp.live) : "Transparent", post: s.scenes.post.live.view }[k]);
 
@@ -195,7 +198,7 @@ VIEWS.overview = {
     const r = M.readiness(), n = r.filter(x => x.level === "block" || x.level === "warn").length;
     setHTML(document.getElementById("ovReadyTag"), n ? `<span class="tag amb">${n} to check</span>` : `<span class="tag pvw">Ready</span>`);
     for (const [, n2, k] of OUTPUTS) {
-      const live = (k === "gameplay" && s.gp.live) || (k === "predictions" && s.pred.visible) || (k === "desk" && (s.deskShow.live !== "clean" || s.deskShow.lt));
+      const live = (k === "gameplay" && s.gp.live) || (k === "predictions" && s.pred.visible) || (k === "desk" && (s.deskShow.live !== "clean" || s.deskShow.lt)) || (k === "analyst" && (s.adeskShow.live !== "clean" || s.adeskShow.lt));
       const m = document.getElementById("mvm-" + k); if (m) m.classList.toggle("pgm", !!live);
       setHTML(document.getElementById("mvc-" + k), `<i class="dot ${live ? "bad" : "off"}"></i><span>${esc(n2)}</span><em>${esc(outState(k, s))}</em>`);
     }
@@ -275,7 +278,20 @@ VIEWS.matchup = {
     setHTML(document.getElementById("fsPvT"), esc(lbl(sc.preview))); setHTML(document.getElementById("fsPgT"), `<span class="tag pgm">${esc(lbl(sc.live))}</span>`); }
 };
 
-/* ---------------- Caster Desk ---------------- */
+/* ---------------- Analyst Desk & Caster Desk ----------------
+   Two separate scenes (#analyst, #desk) with their own state; this page shows whichever tab is open. */
+const isA = () => P.page === "analyst";
+const DS = s => isA() ? s.adesk : s.desk, SHW = s => isA() ? s.adeskShow : s.deskShow;
+const DH = () => isA() ? "analyst" : "desk", DN = () => isA() ? "Analyst desk" : "Caster desk";
+const WH = () => isA() ? "analyst" : "desk", SET = () => Object.keys(SC.DESK_SETS[WH()]);
+// each desk has its own camera profiles: Analyst c1–c2, Caster m1–m3
+const CIDS = () => isA() ? ["c1", "c2"] : ["m1", "m2", "m3"], CLIST = s => (isA() ? s.casters : s.mcasters) || [];
+const LAYS = () => isA() ? SC.DESK : SC.CDESK;
+const shotSeg = (s, d) => { const cams = CIDS().map(id => CLIST(s).find(c => c.id === id) || { id });
+  return cams.map((c, n) => btn("Solo · " + esc(c.name || "Cam " + (n + 1)), "desk.set", { layout: "solo", solo: c.id }, d.layout === "solo" && d.solo === c.id ? "on" : "")).join("")
+    + btn("Dual", "desk.set", { layout: "duo" }, d.layout === "duo" ? "on" : "") + (isA() ? "" : btn("Trio", "desk.set", { layout: "trio" }, d.layout === "trio" ? "on" : "")); };
+// player chosen for the Analyst Desk spotlight (defaults to the editorial selection)
+const spotPid = s => (SHW(s).preview === "player" && SHW(s).ppid) || P.pid;
 // Two sub-views: "Show" (what's on air: state, Take/Hide, predictions) and "Cameras" (names, links, framing: set-up).
 const deskPicks = (s, M, r, compact) => { const picks = (s.pred.byMatch[r.id] || {}).picks || {}, need = Math.ceil((+r.bo || 5) / 2);
   const cs = s.casters.filter(c => c.name);
@@ -289,41 +305,57 @@ VIEWS.desk = {
   mount: s => { const tab = P.deskTab || "show";
     const sub = `<div class="pane" style="grid-column:1/-1"><div class="pb rw" style="justify-content:space-between"><div class="seg"><button class="b ${tab === "show" ? "on" : ""}" data-desktab="show">Show</button><button class="b ${tab === "cams" ? "on" : ""}" data-desktab="cams">Cameras &amp; names</button></div><div class="rw" id="dkAir"></div></div></div>`;
     if (tab === "cams") return `<main class="main" id="main" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto auto auto;align-content:start">${sub}
-      ${pane("Desk output", `<div class="pb">${mon("desk&preview&pgm", "PGM", "pgm", "dkR")}</div>`, `<span id="dkT"></span>`)}
+      ${pane(DN() + " output", `<div class="pb">${mon(DH() + "&preview&pgm", "PGM", "pgm", "dkR")}</div>`, `<span id="dkT"></span>`)}
       ${pane("Layout", `<div class="pb grp" style="gap:10px" id="dkLay"></div>`)}
-      <div style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px">${["c1", "c2"].map((id, n) => camForm(s, id, n)).join("")}</div></main>`;
+      <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(${CIDS().length},minmax(0,1fr));gap:10px">${CIDS().map((id, n) => camForm(s, id, n)).join("")}</div></main>`;
     return `<main class="main" id="main" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr)">${sub}
-      ${pane("Preview · desk", `<div class="pb">${mon("desk&preview", "PVW", "pvw")}</div>`, `<span id="dkPvT"></span>`)}
-      ${pane("Program · desk", `<div class="pb">${mon("desk&preview&pgm", "PGM", "pgm", "dkR")}</div>`, `<span id="dkT"></span>`)}
+      ${pane("Preview · " + DN(), `<div class="pb">${mon(DH() + "&preview", "PVW", "pvw")}</div>`, `<span id="dkPvT"></span>`)}
+      ${pane("Program · " + DN(), `<div class="pb">${mon(DH() + "&preview&pgm", "PGM", "pgm", "dkR")}</div>`, `<span id="dkT"></span>`)}
       <div class="pane"><div class="pb" id="dkStates"></div></div>
       <div class="pane" style="min-height:0"><div class="pb grp" id="dkSide" style="gap:8px;overflow:auto"></div></div></main>`; },
   live: {
-    dkAir: s => `<span class="tag ${s.deskShow.live !== "clean" ? "pgm" : ""}">On air: ${esc(SC.DESK_VIEWS[s.deskShow.live])}</span>${s.deskShow.lt ? `<span class="tag pgm">Lower thirds</span>` : ""}`,
-    dkStates: (s, M) => { const ds = s.deskShow;
-      const sb = (v, k) => { const ok = SC.deskViewOk(v, s);
-        return `<button class="b big2 ${ds.preview === v ? "sel" : ""} ${ds.live === v ? "live" : ""}" ${ok ? `data-act="desk.preview" data-p="${J({ view: v })}"` : `disabled title="${v === "pred" ? "No picks saved for the broadcast match" : "Select a broadcast match with both teams known"}"`}><span>${esc(SC.DESK_VIEWS[v])}</span><kbd>${k}</kbd></button>`; };
-      return `<div class="fsrow"><div class="states">${["clean", "upcoming", "stats", "others", "pred"].map((v, i) => sb(v, "Shift+" + (i + 1))).join("")}</div>
-        <div class="fsact"><button class="b take" data-act="desk.take" data-p="{}" ${ds.preview === ds.live || !SC.deskViewOk(ds.preview, s) ? "disabled" : ""}>Take</button>${btn("Hide", "desk.hide", {}, "hide", ds.live === "clean")}
+    dkAir: s => `<span class="tag ${SHW(s).live !== "clean" ? "pgm" : ""}">On air: ${esc(SC.DESK_VIEWS[SHW(s).live])}</span>${SHW(s).lt ? `<span class="tag pgm">Lower thirds</span>` : ""}`,
+    dkStates: (s, M) => { const ds = SHW(s);
+      const sb = (v, k) => { const pid = v === "player" ? spotPid(s) : null, ok = SC.deskViewOk(v, s, WH(), pid);
+        return `<button class="b big2 ${ds.preview === v ? "sel" : ""} ${ds.live === v ? "live" : ""}" ${ok ? `data-act="desk.preview" data-p="${J(pid ? { view: v, pid } : { view: v })}"` : `disabled title="${v === "pred" ? "No picks saved for the broadcast match" : "Select a broadcast match with both teams known"}"`}><span>${esc(SC.DESK_SETS[WH()][v])}${v === "player" && pid && OD.M.player(pid) ? " · " + esc(OD.M.player(pid).name) : ""}</span><kbd>${k}</kbd></button>`; };
+      return `<div class="fsrow"><div class="states">${SET().map((v, i) => sb(v, "Shift+" + (i + 1))).join("")}</div>
+        <div class="fsact"><button class="b take" data-act="desk.take" data-p="{}" ${(ds.preview === ds.live && (ds.preview !== "player" || ds.ppid === ds.lpid)) || !SC.deskViewOk(ds.preview, s, WH(), ds.ppid) ? "disabled" : ""}>Take</button>${btn("Hide", "desk.hide", {}, "hide", ds.live === "clean")}
         ${sw("Lower thirds", ds.lt, `data-act="desk.lt" data-p="${J({ on: !ds.lt })}"`)}</div></div>
         <div class="m" style="margin-top:8px;color:var(--faint);font-size:11px;font-weight:600">${ds.preview === "pred" ? "Taking Predictions reveals every saved pick for this match." : "Information follows the broadcast match automatically; nothing changes on air without Take."}</div>`; },
-    dkSide: (s, M) => { const d = s.desk, cams = ["c1", "c2"].map(id => s.casters.find(c => c.id === id) || { id }), r = M.active;
-      return `<div class="rw" style="gap:12px"><div class="grp"><span class="gl">Shot</span><div class="seg">${btn("Solo · " + esc(cams[0].name || "Cam 1"), "desk.set", { layout: "solo", solo: "c1" }, d.layout === "solo" && d.solo === "c1" ? "on" : "")}${btn("Solo · " + esc(cams[1].name || "Cam 2"), "desk.set", { layout: "solo", solo: "c2" }, d.layout === "solo" && d.solo === "c2" ? "on" : "")}${btn("Dual", "desk.set", { layout: "duo" }, d.layout === "duo" ? "on" : "")}</div></div>
+    dkSide: (s, M) => { const d = DS(s), cams = ["c1", "c2"].map(id => s.casters.find(c => c.id === id) || { id }), r = M.active;
+      return `<div class="rw" style="gap:12px"><div class="grp"><span class="gl">Shot</span><div class="seg">${shotSeg(s, d)}</div></div>
         <div class="grp"><span class="gl">Visible</span><div class="rw">${sw("Background", d.bg, `data-desk="bg"`)}${sw("Cameras", d.cams, `data-desk="cams"`, d.mode === "local")}${sw("Names", d.plates, `data-desk="plates"`)}${sw("Match strip", d.decor, `data-desk="decor"`)}</div></div></div>
-        <div class="hr"></div><div class="grp"><span class="gl">Predictions · ${r && r.ready ? esc(r.roundShort) + " · " + esc(OD.tname(r.t[0])) + " vs " + esc(OD.tname(r.t[1])) : "no broadcast match"}</span>${r && r.ready ? deskPicks(s, M, r, true) : ""}</div>`; },
-    dkLay: (s, M) => { const d = s.desk, cams = ["c1", "c2"].map(id => s.casters.find(c => c.id === id) || { id }), L = SC.DESK[d.layout] || SC.DESK.duo;
-      return `<div class="grp"><span class="gl">Shot</span><div class="seg">${btn("Solo · " + esc(cams[0].name || "Cam 1"), "desk.set", { layout: "solo", solo: "c1" }, d.layout === "solo" && d.solo === "c1" ? "on" : "")}${btn("Solo · " + esc(cams[1].name || "Cam 2"), "desk.set", { layout: "solo", solo: "c2" }, d.layout === "solo" && d.solo === "c2" ? "on" : "")}${btn("Dual", "desk.set", { layout: "duo" }, d.layout === "duo" ? "on" : "")}</div></div>
+        <div class="hr"></div>${isA() ? analystSide(s, M, r) : casterSide(s, M, r)}`; },
+    dkLay: (s, M) => { const d = DS(s), cams = ["c1", "c2"].map(id => s.casters.find(c => c.id === id) || { id }), L = LAYS()[d.layout] || LAYS().duo;
+      return `<div class="grp"><span class="gl">Shot</span><div class="seg">${shotSeg(s, d)}</div></div>
         <div class="grp"><span class="gl">Camera source</span><div class="seg">${btn("Integrated (VDO.Ninja)", "desk.set", { mode: "integrated" }, d.mode !== "local" ? "on" : "")}${btn("Local OBS", "desk.set", { mode: "local" }, d.mode === "local" ? "on" : "")}</div></div>
         <div class="grp"><span class="gl">Visible</span><div class="rw">${sw("Background", d.bg, `data-desk="bg"`)}${sw("Integrated cameras", d.cams, `data-desk="cams"`, d.mode === "local")}${sw("Names", d.plates, `data-desk="plates"`)}${sw("Frames", d.frames && !d.bg, `data-desk="frames"`, d.bg)}${sw("Match strip", d.decor, `data-desk="decor"`)}</div></div>
-        ${d.mode === "local" ? `<div class="hr"></div><div class="grp"><span class="gl">OBS camera placement · same in every desk state</span>${L.slots.map((sl, i) => `<div class="mono-s">Cam ${i + 1} · 1080p x ${sl.x} y ${sl.y} ${sl.w}×${sl.h} · 4K x ${sl.x * 2} y ${sl.y * 2} ${sl.w * 2}×${sl.h * 2}</div>`).join("")}</div>` : `<div class="m" style="color:var(--faint);font-size:11px;font-weight:600">Both cameras stay connected; solo ↔ dual and every desk state only move or overlay them.</div>`}`; }
+        ${d.mode === "local" ? `<div class="hr"></div><div class="grp"><span class="gl">OBS camera placement · same in every desk state</span>${L.slots.map((sl, i) => `<div class="mono-s">Cam ${i + 1} · 1080p x ${sl.x} y ${sl.y} ${sl.w}×${sl.h} · 4K x ${sl.x * 2} y ${sl.y * 2} ${sl.w * 2}×${sl.h * 2}</div>`).join("")}</div>` : `<div class="m" style="color:var(--faint);font-size:11px;font-weight:600">Every camera stays connected; changing the shot or the desk state only moves or overlays them.</div>`}`; }
   },
-  tick: s => { const d = s.desk; setHTML(document.getElementById("dkT"), `<span class="tag ${s.deskShow.live !== "clean" ? "pgm" : ""}">${esc(SC.DESK_VIEWS[s.deskShow.live])}</span>`);
-    setHTML(document.getElementById("dkPvT"), esc(SC.DESK_VIEWS[s.deskShow.preview]));
+  tick: s => { const d = DS(s); setHTML(document.getElementById("dkT"), `<span class="tag ${SHW(s).live !== "clean" ? "pgm" : ""}">${esc(SC.DESK_VIEWS[SHW(s).live])}</span>`);
+    setHTML(document.getElementById("dkPvT"), esc(SC.DESK_VIEWS[SHW(s).preview]));
     const r = document.getElementById("dkR"); if (r) r.textContent = "cameras not loaded in monitors";
-    for (const id of ["c1", "c2"]) { const el = document.getElementById("shot-" + id); if (!el) continue; const inShot = d.layout === "duo" || d.solo === id;
+    const inL = (s[isA() ? "adeskProfiles" : "deskProfiles"] || {})[d.layout] || [];
+    for (const id of CIDS()) { const el = document.getElementById("shot-" + id); if (!el) continue; const inShot = inL.includes(id);
       setHTML(el, inShot ? `<span class="tag pgm">in shot</span>` : `<span class="tag">parked</span>`); } }
 };
+VIEWS.analyst = VIEWS.desk;
+function analystSide(s, M, r) {
+  if (!r || !r.ready) return `<span class="empty">Select a broadcast match with both teams known.</span>`;
+  const ps = matchPlayers(M), cur = spotPid(s);
+  return `<div class="grp"><span class="gl">Player spotlight · choose, then Take</span><div class="rw">${ps.map(pid => btn(`${esc(M.player(pid).name)}`, "desk.preview", { view: "player", pid }, cur === pid && SHW(s).preview === "player" ? "sel xs2" : "xs2")).join("")}</div></div>
+    <div class="hr"></div><div class="grp"><span class="gl">Predictions · ${esc(r.roundShort)} · ${esc(OD.tname(r.t[0]))} vs ${esc(OD.tname(r.t[1]))}</span>${deskPicks(s, M, r, true)}</div>`;
+}
+function casterSide(s, M, r) {
+  if (!r || !r.ready) return `<span class="empty">Select a broadcast match with both teams known.</span>`;
+  const ms = SC.mapState(s, r), maps = M.maps();
+  const row = g => `<div class="ml"><b>Map ${g.n}</b><select class="in" data-maplog="${g.n}">${["", ...maps.map(m => m.id)].map(id => `<option value="${esc(id)}"${(g.map || "") === id ? " selected" : ""}>${id ? esc(maps.find(m => m.id === id).name) : "—"}</option>`).join("")}</select>
+    ${r.t.map(id => btn(`${logoImg(id)}${esc(M.team(id).short)}`, "map.set", { matchId: r.id, game: g.n, winner: g.winner === id ? "" : id }, g.winner === id ? "sel xs2" : "xs2", !g.map && !g.winner)).join("")}${g === ms.cur ? `<span class="tag pgm">now</span>` : ""}</div>`;
+  return `<div class="grp"><span class="gl">Map log · ${esc(r.roundShort)} · series ${ms.a}–${ms.b}${ms.logged ? "" : " (from the sheet until a map winner is logged)"}</span>${ms.games.map(row).join("")}
+    <div class="rw">${btn("Clear log", "map.clear", { matchId: r.id }, "xs")}</div></div>`;
+}
 function camForm(s, id, n) {
-  const c = s.casters.find(x => x.id === id) || { id, crop: {} }, priv = (P.priv && P.priv.casters) || {};
+  const c = s.casters.concat(s.mcasters || []).find(x => x.id === id) || { id, crop: {} }, priv = (P.priv && P.priv.casters) || {};
   const has = !!((priv[id] || {}).vdo);
   return `<div class="cam" data-cid="${id}"><div class="sl"><span class="gl">Cam</span><b>${n + 1}</b><span id="shot-${id}"></span></div>
     <div class="fs"><div class="field"><label>Caster</label><input class="in" data-f="name" value="${esc(c.name || "")}" placeholder="Name"></div>
@@ -411,7 +443,7 @@ VIEWS.bracket = {
 };
 
 /* ---------------- Settings ---------------- */
-const SOURCES = [["waiting", "Starting soon / BRB / Ending"], ["desk", "Caster desk", true], ["matchup", "Matchup / team introduction"], ["player", "Player information"],
+const SOURCES = [["waiting", "Starting soon / BRB / Ending"], ["analyst", "Pre-show / Analyst desk", true], ["desk", "Match / Caster desk", true], ["matchup", "Matchup / team introduction"], ["player", "Player information"],
   ["bracket", "Bracket / tournament overview"], ["predictions", "Caster predictions"], ["maps", "Map information"], ["gameplay", "Gameplay editorial layer"], ["postmatch", "Post-match / MVP"]];
 VIEWS.settings = {
   mount: () => `<main class="main st" id="main" style="grid-template-columns:repeat(3,minmax(0,1fr));overflow:auto;align-content:start">
@@ -436,7 +468,7 @@ VIEWS.settings = {
       return `<div class="m">Connected · program: <b>${esc(o.scene || "?")}</b></div><div class="rw">${(o.scenes || []).map(n => `<button class="b xs ${n === o.scene ? "on" : ""}" data-obsscene="${esc(n)}">${esc(n)}</button>`).join("")}</div><div class="rw"><button class="b xs" data-obsoff>Disconnect</button></div>`; },
     stAssets: (s, M) => { const has = (dir, n) => ((s.assets || {})[dir] || []).some(f => f.replace(/\.[a-z0-9]+$/i, "") === n);
       const row = (ok, path, note) => `<div class="li" style="grid-template-columns:10px 1fr"><i class="dot ${ok ? "" : "amb"}"></i><div style="min-width:0"><div class="t mono-s">${path}</div>${note ? `<div class="m">${note}</div>` : ""}</div></div>`;
-      return [["major-logo", "Major logo (status bar, every full-screen scene)", false], ["logo", "OverDrive logo · fallback", true], ["mark", "OverDrive mark · gameplay cards", true], ["bar", "Full-screen background", true], ["screen", "Break background", true], ["desk-solo", "Desk frame · solo", true], ["desk-duo", "Desk frame · dual", true], ["stinger", "Stinger (OBS)", true]]
+      return [["major-logo", "Major logo (status bar, every full-screen scene)", false], ["logo", "OverDrive logo · fallback", true], ["mark", "OverDrive mark · gameplay cards", true], ["bar", "Full-screen background", true], ["screen", "Break background", true], ["desk-solo", "Desk solo (both desks)", true], ["desk-duo", "Analyst desk · dual", true], ["caster-duo", "Caster desk · duo (casters booth)", false], ["caster-trio", "Caster desk · trio (casters booth)", false], ["stinger", "Stinger (OBS)", true]]
         .map(([n, l, from]) => row(has("brand", n), `brand/${n}`, esc(l) + (has("brand", n) && from ? " · original OverDrive package" : has("brand", n) ? "" : " · missing"))).join("")
         + Object.values(M.teams).map(t => row(!!t.logo, `logos/${esc(OD.norm(t.name))}.png`, esc(t.name) + (t.logo ? " · 64 px, ≥256 px recommended" : " · missing"))).join(""); },
     stFacts: s => (s.facts || []).map(f => `<div class="li" style="grid-template-columns:1fr auto"><div style="min-width:0"><div class="t" title="${esc(f.text)}">${esc(f.text)}</div><div class="m">${esc(f.subject.type === "team" ? OD.tname(f.subject.id) : f.subject.type === "player" ? ((OD.M.player(f.subject.id) || {}).name || "") : "Event")} · ${esc(f.source)}</div></div>${btn("Remove", "fact.remove", { id: f.id }, "xs")}</div>`).join("") || `<div class="empty">No facts yet.</div>`,
@@ -484,14 +516,14 @@ function onClick(e) {
   if (t.dataset.go) { e.preventDefault(); return go(t.dataset.go); }
   if (t.dataset.pos) { const p = OD.S.gp.pos; return OD.act("gp.pos", { pos: { ...p, preset: t.dataset.pos } }); }
   if (t.disabled) return;
-  if (t.dataset.act) { const p = JSON.parse(t.dataset.p || "{}"); if (p.g && p.g.type) p.g.dur = P.dur; return OD.act(t.dataset.act, p); }
+  if (t.dataset.act) { const p = JSON.parse(t.dataset.p || "{}"); if (/^desk\./.test(t.dataset.act) && isA()) p.d = "analyst"; if (p.g && p.g.type) p.g.dur = P.dur; return OD.act(t.dataset.act, p); }
   if ("take" in t.dataset) return take();
   if (t.dataset.dur !== undefined) { P.dur = +t.dataset.dur; return update(true); }
   if (t.dataset.pick) return previewPlayer(t.dataset.pick).then(() => update(true));
   if (t.dataset.fs) { P.fs = t.dataset.fs; return mount(); }
   if (t.dataset.desktab) { P.deskTab = t.dataset.desktab; return mount(); }
   if (t.dataset.scenebg) return OD.act("scene.bg", { scene: t.dataset.scenebg, on: !OD.S.scenes[t.dataset.scenebg].bg });
-  if (t.dataset.desk) { const k = t.dataset.desk; return OD.act("desk.set", { [k]: !OD.S.desk[k] }); }
+  if (t.dataset.desk) { const k = t.dataset.desk; return OD.act("desk.set", { [k]: !DS(OD.S)[k], d: isA() ? "analyst" : undefined }); }
   if (t.dataset.panel) { const k = t.dataset.panel; return OD.act("brk.set", { panels: { [k]: !OD.S.brk.panels[k] } }); }
   if ("brkbg" in t.dataset) return OD.act("brk.set", { bg: !OD.S.brk.bg });
   if (t.dataset.bo) { const k = t.dataset.bo; return OD.act("bracket.opts", { opts: { [k]: !OD.S.bracketOpts[k] } }); }
@@ -513,6 +545,7 @@ function onClick(e) {
 }
 function onChange(e) {
   const t = e.target;
+  if (t.dataset.maplog) { const r = OD.M.active; if (r) return OD.act("map.set", { matchId: r.id, game: +t.dataset.maplog, map: t.value }); }
   if ("predmatch" in t.dataset) { P.predMatch = t.value; return update(true); }
   if ("curmap" in t.dataset) { P.curMap = t.value || null; const sc = OD.S.scenes.maps; if (sc.preview.view === "pool") OD.act("scene.set", { scene: "maps", slot: "preview", view: "pool", params: { current: P.curMap } }); return update(true); }
   if (t.dataset.sett) return OD.act("settings.set", { [t.dataset.sett]: t.value });
@@ -526,11 +559,11 @@ const GKEYS = { q: "player", w: "achievements", e: "career" };
 function onKey(e) {
   const typing = /INPUT|SELECT|TEXTAREA/.test((document.activeElement || {}).tagName || "");
   if (e.key === "Escape") { e.preventDefault(); if (typing) { document.activeElement.blur(); return; } return OD.act("editorial.clear"); }
-  const f = /^F([1-8])$/.exec(e.key); if (f) { e.preventDefault(); return go(PAGES[+f[1] - 1][0]); }
+  const f = /^F([1-9])$/.exec(e.key); if (f) { e.preventDefault(); return go(PAGES[+f[1] - 1][0]); }
   if (typing || e.ctrlKey || e.metaKey || e.altKey || !OD.M) return;
   const M = OD.M, r = M.active, ps = matchPlayers(M);
-  // desk states: Shift+1…5 preview Clean / Upcoming / Stats / Others / Predictions (Take stays a click)
-  if (P.page === "desk" && e.shiftKey && /^Digit[1-5]$/.test(e.code)) { e.preventDefault(); const v = ["clean", "upcoming", "stats", "others", "pred"][+e.code.slice(5) - 1]; return SC.deskViewOk(v, OD.S) ? OD.act("desk.preview", { view: v }) : OD.toast("Nothing to show for that state yet", true); }
+  // desk states: Shift+1… preview the open desk's states in button order (Take stays a click)
+  if ((P.page === "desk" || P.page === "analyst") && e.shiftKey && /^Digit[1-9]$/.test(e.code) && SET()[+e.code.slice(5) - 1]) { e.preventDefault(); const v = SET()[+e.code.slice(5) - 1]; const pid = v === "player" ? spotPid(OD.S) : undefined; return SC.deskViewOk(v, OD.S, WH(), pid) ? OD.act("desk.preview", { view: v, pid, d: isA() ? "analyst" : undefined }) : OD.toast("Nothing to show for that state yet", true); }
   if (/^[1-4]$/.test(e.key) && ps[+e.key - 1]) { e.preventDefault(); return previewPlayer(ps[+e.key - 1]).then(() => update(true)); }
   if (P.page !== "gameplay") return;
   if (e.key === " ") { e.preventDefault(); return take(); }

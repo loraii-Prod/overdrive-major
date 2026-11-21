@@ -321,7 +321,7 @@ function journeyHTML(r) {
   const M = OD.M, J = r.t.map(id => journeyOf(r, id));
   const n = Math.max(1, J[0].played.length, J[1].played.length);
   // rows region y 330–830; rows grow when there are few of them
-  const gap = n > 3 ? 12 : 18, rh = Math.min(136, Math.floor((462 - (n - 1) * gap) / n)), total = n * rh + (n - 1) * gap, top = 342 + Math.round((462 - total) / 2);
+  const gap = n > 3 ? 12 : 18, rh = Math.min(132, Math.floor((436 - (n - 1) * gap) / n)), total = n * rh + (n - 1) * gap, top = 380 + Math.round((436 - total) / 2);
   const step = 380, base = 700, rowDelay = k => base + k * step, nowDelay = base + n * step + 250;
   const facing = r.bid !== "R6_GF" && !r.loseTo, finalNote = r.bid === "R6_GF" ? "Playing for the title" : null;
   const head = (j, side) => { const t = M.team(j.id), stats = [];
@@ -334,23 +334,23 @@ function journeyHTML(r) {
     if (finalNote) chips.push(`<span class="jr-chip hot">${finalNote}</span>`);
     if (j.wc) chips.push(`<span class="jr-chip">Via Wildcards</span>`);
     return `<div class="jr-head ${side}" data-r="${side === "L" ? "l" : "r"}" style="--d:${side === "L" ? 120 : 220}ms">${tlogo(j.id)}
-      <div class="jr-hb"><div class="jr-chips">${chips.join("")}</div><div class="jr-name" style="font-size:${Math.round(66 * Math.min(1, 11 / Math.max(1, t.name.length)))}px">${esc(t.name)}</div>
+      <div class="jr-hb"><div class="jr-chips">${chips.join("")}</div><div class="jr-name fit">${esc(t.name)}</div>
       <div class="jr-stats">${stats.map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join("")}</div></div></div>`; };
   const row = (j, p, k, side) => { const [bk, bw] = bracketOf(p.r.bid), sc = p.r.forfeit ? (p.won ? "W" : "L") + "<small>FF</small>" : `${esc(p.sf)}<i>–</i>${esc(p.sa)}`;
     return `<div class="jr-row ${p.won ? "won" : "lost"}" data-r="${side === "L" ? "l" : "r"}" style="--d:${rowDelay(k) + (side === "R" ? 120 : 0)}ms;top:${top + k * (rh + gap)}px">
-      <div class="jr-rd ${bk}"><span>${bw}</span><b>${esc(roundWord(p.r.bid))}</b></div>
-      <div class="jr-opp">${tlogo(p.opp)}<b style="--fit:${Math.min(1, 8.5 / Math.max(1, OD.tname(p.opp).length)).toFixed(2)}">${esc(OD.tname(p.opp))}</b></div>
+      <div class="jr-rd ${bk}"><span>${bw}</span><b class="fit">${esc(roundWord(p.r.bid))}</b></div>
+      <div class="jr-opp">${tlogo(p.opp)}<b class="fit">${esc(OD.tname(p.opp))}</b></div>
       <div class="jr-sc">${sc}</div><div class="jr-res">${p.won ? "Win" : "Loss"}</div></div>`; };
   const empty = (j, side) => `<div class="jr-row first" data-r="${side === "L" ? "l" : "r"}" style="--d:${rowDelay(0)}ms;top:${top}px"><div class="jr-first"><b>Opening match</b><span>${j.orig ? "Seed " + j.orig + " · " : ""}first series of the Major</span></div></div>`;
   // spines: from the first row down the inner edge, then turning in to meet above the current matchup
-  const y0 = top + rh / 2, yEnd = 826, dur = Math.max(.9, (nowDelay - base) / 1000);
+  const y0 = top + rh / 2, yEnd = 828, dur = Math.max(.9, (nowDelay - base) / 1000);
   const spine = side => { const x = side === "L" ? 892 : 1028, dx = side === "L" ? 1 : -1;
     return `<path class="jr-spine" pathLength="1" d="M${x} ${y0} V${yEnd - 30} Q${x} ${yEnd} ${x + dx * 30} ${yEnd} H960"/>`; };
   const ticks = (j, side) => j.played.map((p, k) => { const y = top + k * (rh + gap) + rh / 2, x = side === "L" ? 892 : 1028;
     return `<g class="jr-dot ${p.won ? "won" : ""}" style="--d:${rowDelay(k) + 200}ms"><path d="M${side === "L" ? 862 : 1058} ${y} H${x}"/><rect x="${x - 9}" y="${y - 9}" width="18" height="18" transform="rotate(45 ${x} ${y})"/></g>`; }).join("");
   const live = r.status === "live" || r.winner;
   const now = `<div class="jr-now" data-r style="--d:${nowDelay}ms"><div class="jr-now-k">${live ? (r.winner ? "Final" : "Live now") : "Up now"}</div>
-    <div class="jr-now-b">${tlogo(r.t[0])}<div class="jr-now-m"><b>${esc(r.round)}</b><span>${live ? `${esc(r.s1 || 0)}–${esc(r.s2 || 0)}` : `Best of ${esc(r.bo)}${r.at ? " · " + esc(OD.time(r.at)) + " CET" : ""}`}</span></div>${tlogo(r.t[1])}</div></div>`;
+    <div class="jr-now-b">${tlogo(r.t[0])}<div class="jr-now-m"><b class="fit">${esc(r.round)}</b><span>${live ? `${esc(r.s1 || 0)}–${esc(r.s2 || 0)}` : `Best of ${esc(r.bo)}${r.at ? " · " + esc(OD.time(r.at)) + " CET" : ""}`}</span></div>${tlogo(r.t[1])}</div></div>`;
   return `<div class="jr" style="--rh:${rh}px;--dur:${dur}s;--d0:${base}ms">
     <div class="jr-title" data-r style="--d:0ms"><span class="lbl">Road to the</span><div class="d-m">${esc(r.round)}</div></div>
     ${head(J[0], "L")}${head(J[1], "R")}
@@ -360,6 +360,11 @@ function journeyHTML(r) {
     ${now}</div>`;
 }
 SC.journeyHTML = journeyHTML;
+function fitText(root) {
+  root.querySelectorAll(".fit").forEach(el => { el.style.fontSize = ""; let fs = parseFloat(getComputedStyle(el).fontSize), n = 0;
+    while (el.scrollWidth > el.clientWidth + 1 && fs > 12 && n++ < 60) { fs -= 1; el.style.fontSize = fs + "px"; } });
+}
+SC.fitText = fitText;
 /* ---------- What's at stake: consequences of the result, built from the bracket structure ----------
    Advancement, elimination placements, guaranteed floors, prize money and next opponents all come from the derived
    bracket (core.js) and the verified prize table. Stages: teams → importance → winner's route → losing. */
@@ -416,7 +421,8 @@ SC.matchup = (root, preview) => {
     F.bar(barHTML([r.round, "Best of " + r.bo].concat(r.at && !r.winner ? [OD.day(r.at) + " · " + OD.time(r.at) + " CET"] : [])));
     const top = `<div class="mu-top" data-r><div class="d-m">${esc(r.round)}</div></div>`;
     if (view === "stakes") return F.show(r.id + ":stakes:" + (r.winTo ? r.winTo.bid : ""), stakesHTML(r), 4600);
-    if (view === "path") { const h = journeyHTML(r); return F.show(r.id + ":path", h, 1000 + (Math.max(1, ...r.t.map(id => journeyOf(r, id).played.length)) + 2) * 380 + 900); }
+    if (view === "path") { const h = journeyHTML(r); F.show(r.id + ":path", h, 1000 + (Math.max(1, ...r.t.map(id => journeyOf(r, id).played.length)) + 2) * 380 + 900);
+      const fit = () => fitText(F.st); fit(); setTimeout(fit, 320); if (document.fonts) document.fonts.ready.then(fit); return; }
     const html = view === "versus" ? top + `<div class="vs-grid">${versusHTML(r)}</div>` : view === "intro0" ? introHTML(r, 0) : view === "intro1" ? introHTML(r, 1) : view === "h2h" ? infoPanels(r, view) : top + infoPanels(r, view);
     F.show(r.id + ":" + view, html);
   });
@@ -538,23 +544,70 @@ SC.DESK = {
   solo: { video: "desk-solo", slots: [{ x: 427, y: 207, w: 1067, h: 600, ph: 58 }] },
   duo: { video: "desk-duo", slots: [{ x: 177, y: 308, w: 730, h: 408, ph: 58 }, { x: 1013, y: 308, w: 730, h: 408, ph: 58 }] }
 };
+// Caster Desk (match) loops: "Casters booth" duo and trio, with transparent camera openings
+SC.CDESK = {
+  solo: SC.DESK.solo,
+  duo: { video: "caster-duo", slots: [{ x: 177, y: 308, w: 730, h: 408, ph: 60 }, { x: 1013, y: 308, w: 730, h: 408, ph: 60 }] },
+  trio: { video: "caster-trio", slots: [{ x: 73, y: 309, w: 564, h: 407, ph: 60 }, { x: 678, y: 309, w: 564, h: 407, ph: 60 }, { x: 1283, y: 309, w: 564, h: 407, ph: 60 }] }
+};
 /* ---------- desk presentation states: information placed around the fixed camera frames ----------
    Dual: a header above the cameras and a band under them (one wing under each camera).
    Solo: a header above the camera and a column either side of it. The cameras never move, so the desk loop's
    baked-in frames and any local OBS camera sources stay aligned in every state. */
-const DESK_VIEWS = { clean: "Clean desk", upcoming: "Upcoming matchup", stats: "Tournament stats", others: "Other matches", pred: "Predictions" };
-SC.DESK_VIEWS = DESK_VIEWS;
-SC.deskViewOk = (view, s) => { const M = OD.M, r = M && M.active;
+/* Two editorially different desks around the same cameras:
+   Analyst Desk (pre-show): matchup, team comparison, road so far, stakes, player spotlight, predictions, storylines.
+   Caster Desk (match): series score, map info, map results and series progression, other matches. */
+const DESK_SETS = {
+  analyst: { clean: "Clean desk", upcoming: "Matchup", stats: "Team comparison", path: "Road so far", stakes: "What's at stake", player: "Player spotlight", pred: "Predictions", story: "Storylines" },
+  desk: { clean: "Clean desk", series: "Series score", map: "Map info", maps: "Map results", others: "Other matches" } };
+const DESK_VIEWS = Object.assign({}, DESK_SETS.desk, DESK_SETS.analyst);
+SC.DESK_SETS = DESK_SETS; SC.DESK_VIEWS = DESK_VIEWS;
+// map log for a match (entered by the producer): games, the one being played, the next one, and the series score
+function mapState(s, r) {
+  const M = OD.M, bo = +r.bo || 5, need = Math.ceil(bo / 2), log = ((s.mapLog || {})[r.id]) || [];
+  const games = Array.from({ length: bo }, (_, i) => Object.assign({ n: i + 1 }, log[i] || {}));
+  games.forEach(g => { if (g.winner && !r.t.includes(g.winner)) g.winner = null; });   // a winner must be one of the two teams
+  const mapOf = id => M.maps().find(m => m.id === id) || null;
+  games.forEach(g => { g.m = g.map ? mapOf(g.map) : null; });
+  const logged = games.some(g => g.winner);
+  const a = logged ? games.filter(g => g.winner === r.t[0]).length : (parseInt(r.s1, 10) || 0), b = logged ? games.filter(g => g.winner === r.t[1]).length : (parseInt(r.s2, 10) || 0);
+  const ci = games.findIndex(g => g.m && !g.winner), cur = ci >= 0 ? games[ci] : null;
+  const next = games.find((g, i) => i > ci && g.m && !g.winner) || null;
+  return { games, need, a, b, cur, next, logged, done: a >= need || b >= need };
+}
+SC.mapState = mapState;
+function storylines(s, r) {
+  // verified storylines only: producer facts about these teams/players/the event, plus facts derived from the bracket
+  const M = OD.M, out = [], pl = r.t.flatMap(id => M.team(id).players);
+  for (const f of s.facts || []) { const sub = f.subject || {};
+    if ((sub.type === "team" && r.t.includes(sub.id)) || (sub.type === "player" && pl.includes(sub.id))) out.push({ text: f.text, src: f.source }); }
+  const h = M.h2h(r.t[0], r.t[1]).filter(x => x.id !== r.id);
+  if (h.length) out.push({ text: `Rematch: ${OD.tname(r.t[0])} and ${OD.tname(r.t[1])} have met ${h.length === 1 ? "once" : h.length + " times"} before (${h.map(x => `${x.sa}–${x.sb}`).join(", ")})`, src: "Major + Wildcard sheets" });
+  for (const id of r.t) { const j = journeyOf(r, id);
+    if (j.played.length >= 2 && !j.sl) out.push({ text: `${OD.tname(id)} are unbeaten at the Major: ${j.sw}–0 in series, ${j.mw}–${j.ml} in maps`, src: "Major sheet" });
+    if (j.cur && j.orig && j.orig - j.cur >= 2) out.push({ text: `${OD.tname(id)} came in as seed ${j.orig} and now hold seed ${j.cur}`, src: "Major sheet" });
+    if (j.streak >= 3) out.push({ text: `${OD.tname(id)} have won ${j.streak} series in a row`, src: "Major sheet" }); }
+  if (r.bid !== "R6_GF" && !r.loseTo && r.elimPlace) out.push({ text: `Elimination match: the loser finishes ${r.elimPlace}${M.prize(r.elimPlace) ? " (" + M.prize(r.elimPlace) + ")" : ""}`, src: "Major sheet · Liquipedia prize pool" });
+  for (const f of s.facts || []) if ((f.subject || {}).type === "event") out.push({ text: f.text, src: f.source });
+  return out;
+}
+SC.deskViewOk = (view, s, which, pid) => { const M = OD.M, r = M && M.active, set = DESK_SETS[which === "analyst" ? "analyst" : "desk"];
+  if (!(view in set)) return false;
   if (view === "clean") return true;
   if (view === "others") return deskOthers(r).res.length + deskOthers(r).next.length > 0;
   if (!r || !r.ready) return false;
   if (view === "pred") return Object.values(((s.pred.byMatch[r.id] || {}).picks) || {}).some(p => r.t.includes(p.team));
+  if (view === "path") return r.t.some(id => journeyOf(r, id).played.length);
+  if (view === "player") return !!pid && r.t.some(id => M.team(id).players.includes(pid));
+  if (view === "story") return storylines(s, r).length > 0;
+  if (view === "map") { const ms = mapState(s, r); return !!(ms.cur || ms.next); }
+  if (view === "maps") return mapState(s, r).games.some(g => g.m || g.winner);
   return true; };
 function deskOthers(r) { const M = OD.M, not = x => !r || x.id !== r.id;
   return { res: M.list.filter(x => x.winner && not(x)).slice(-4).reverse(), next: M.list.filter(x => x.ready && !x.winner && not(x)).slice(0, 4) }; }
-const dpTeam = (r, i, orient, d) => { const M = OD.M, id = r.t[i], t = M.team(id), j = journeyOf(r, id);
+const dpTeam = (r, i, orient, d, score) => { const M = OD.M, id = r.t[i], t = M.team(id), j = journeyOf(r, id);
   const line = [j.orig ? (j.cur && j.cur !== j.orig ? `Seed ${j.cur} · from ${j.orig}` : `Seed ${j.orig}`) : null, `Major ${j.sw}–${j.sl}`].filter(Boolean).join(" · ");
-  return `<div class="dp-team ${orient}" data-r="${i ? "r" : "l"}" style="--i:${d}">${tlogo(id)}<div class="dp-tb"><div class="dp-nm">${esc(t.name)}</div><div class="dp-ln">${esc(line)}</div></div></div>`; };
+  return `<div class="dp-team ${orient} ${score != null ? "scored" : ""}" data-r="${i ? "r" : "l"}" style="--i:${d}">${tlogo(id)}<div class="dp-tb"><div class="dp-nm">${esc(t.name)}</div><div class="dp-ln">${esc(line)}</div></div>${score != null ? `<div class="dp-scr">${esc(score)}</div>` : ""}</div>`; };
 const dpStats = (r, i, d) => { const id = r.t[i], j = journeyOf(r, id);
   const st = [["Record", `${j.sw}–${j.sl}`], ["Maps", `${j.mw}–${j.ml}`], ["Seed", j.orig ? (j.cur && j.cur !== j.orig ? `${j.cur}<small>/${j.orig}</small>` : `${j.orig}`) : "—"], ["Streak", j.streak ? "W" + j.streak : "—"]];
   const status = r.bid === "R6_GF" ? "Playing for the title" : !r.loseTo ? "Facing elimination" : j.lower ? "Lower bracket" : "Upper bracket";
@@ -570,29 +623,70 @@ const dpPick = (r, c, p, sealed, d) => { if (!c) return "";
   const i = r.t.indexOf(p.team), score = p.s1 != null && p.s2 != null ? (i ? `${p.s2}–${p.s1}` : `${p.s1}–${p.s2}`) : "";
   return `<div class="dp-pk ${sealed ? "sealed" : ""}" data-r style="--i:${d}"><div class="who"><small>${sealed ? "Not revealed yet" : "Predicts"}</small>${esc(c.name)}</div>
     ${tlogo(p.team)}<div class="tm"><b>${esc(OD.tname(p.team))}</b>${score ? `<span>${esc(score)}</span>` : ""}</div></div>`; };
-function deskPanelHTML(view, s, lay, cams, preview) {
+// analyst pieces
+const dpPath = (r, i, d) => { const id = r.t[i], j = journeyOf(r, id);
+  const chips = j.played.length ? j.played.map(p => `<div class="dp-chip ${p.won ? "w" : "l"}"><span>${esc(bracketOf(p.r.bid)[1])} ${esc(roundWord(p.r.bid))}</span><div class="ln">${tlogo(p.opp)}<b>${p.r.forfeit ? (p.won ? "W" : "L") : esc(p.sf) + "–" + esc(p.sa)}</b></div></div>`).join("") : `<div class="dp-chip first"><b>Opening match</b></div>`;
+  return `<div class="dp-path" data-r="${i ? "r" : "l"}" style="--i:${d}"><div class="dp-ph">${tlogo(id)}<b>${esc(OD.tname(id))}</b><span>${j.sw}–${j.sl}</span></div><div class="dp-chips">${chips}</div></div>`; };
+const dpStake = (r, win, d) => { const M = OD.M, gf = r.bid === "R6_GF";
+  if (win) { const nx = gf ? null : r.winTo ? M.byBid[r.winTo.bid] : null, fl = gf ? "1st" : nx ? M.floor(nx) : null;
+    return `<div class="dp-sk go" data-r style="--i:${d}"><span class="k">Win</span><b>${gf ? "Champions" : "Advance to the " + esc(roundTitle(nx))}</b>${fl ? `<i>${gf ? "1st place" : "Guaranteed " + esc(fl) + " or better"}${M.prize(fl) ? " · " + esc(M.prize(fl)) : ""}</i>` : ""}</div>`; }
+  const lo = r.loseTo ? M.byBid[r.loseTo.bid] : null, pl = gf ? "2nd" : lo ? M.floor(lo) : r.elimPlace;
+  return `<div class="dp-sk stop ${lo ? "" : "out"}" data-r style="--i:${d}"><span class="k">Lose</span><b>${lo ? "Drop to the " + esc(roundTitle(lo)) : gf ? "Runners-up" : "Eliminated · " + esc(pl || "")}</b>${pl ? `<i>${lo ? "Still guaranteed " + esc(pl) + " or better" : "Final placement " + esc(pl)}${M.prize(pl) ? " · " + esc(M.prize(pl)) : ""}</i>` : ""}</div>`; };
+const dpPlayer = (pid, side, lay, d) => { const M = OD.M, p = M.player(pid), t = M.teamOfPlayer(pid), v = M.vplayer(pid), age = M.age(pid);
+  if (side === "A") return `<div class="dp-pl" data-r="l" style="--i:${d}">${OD.photo(pid, "", 1.2) || `<div class="phx noph"></div>`}<div class="dp-plb"><div class="dp-nm">${esc(p.name)}</div><div class="dp-ln">${t ? esc(t.name) + " · " : ""}${esc(OD.natCode(p.nat))}${age ? " · " + esc(age) : ""}</div>${v && v.earnings ? `<div class="dp-earn"><span>Career prize money</span><b>${esc(v.earnings)}</b></div>` : ""}</div></div>`;
+  const ach = M.achievements(pid).slice(0, lay === "solo" ? 5 : 3);
+  return `<div class="dp-ach" data-r="r" style="--i:${d}"><div class="dp-ot">Honours</div>${ach.length ? ach.map(a => `<div class="r"><b>${esc(a.place)}</b><span>${esc(a.event)}</span></div>`).join("") : `<div class="r"><span>No verified results yet</span></div>`}<div class="src">Liquipedia, read 9–10 Nov 2026</div></div>`; };
+// caster pieces
+const dpMapCard = (g, label, d) => g && g.m ? `<div class="dp-mapc" data-r style="--i:${d};${g.m.photo ? `background-image:url('${esc(g.m.photo)}')` : ""}"><div class="ov"><span>${esc(label)} · Map ${g.n}</span><b>${esc(g.m.name)}</b><i>Author ${esc(g.m.author)}</i></div></div>` : "";
+const dpPBs = (g, d) => { if (!g || !g.m || !g.m.pbs.length) return "";
+  return `<div class="dp-ach" data-r style="--i:${d}"><div class="dp-ot">Fastest in the field · ${esc(g.m.name)}</div>${g.m.pbs.slice(0, 3).map(([h, t]) => `<div class="r"><b>${esc(t)}</b><span>${esc(h)}</span></div>`).join("")}</div>`; };
+const dpGames = (r, ms, d) => `<div class="dp-games" data-r style="--i:${d}">${ms.games.map(g => { const st = g.winner ? "done" : g === ms.cur ? "now" : "";
+  return `<div class="dp-g ${st}" style="${g.m && g.m.photo ? `--img:url('${esc(g.m.photo)}')` : ""}"><span>Map ${g.n}${g === ms.cur ? " · now" : ""}</span><b>${g.m ? esc(g.m.name) : "—"}</b>${g.winner ? `<i>${tlogo(g.winner)}${esc((OD.M.team(g.winner) || {}).short || OD.tname(g.winner))}</i>` : ""}</div>`; }).join("")}</div>`;
+const dpSeries = (r, ms, d) => `<div class="dp-ser" data-r style="--i:${d}"><div class="sd">${tlogo(r.t[0])}<b class="${ms.a >= ms.b ? "" : "lo"}">${ms.a}</b></div><i>–</i><div class="sd R"><b class="${ms.b >= ms.a ? "" : "lo"}">${ms.b}</b>${tlogo(r.t[1])}</div><em class="ft">First to ${ms.need}</em></div>`;
+function deskPanelHTML(view, s, lay, cams, preview, which, pid) {
   const M = OD.M, r = M.active;
-  if (view === "clean" || !SC.deskViewOk(view, s)) return "";
+  if (view === "clean" || !SC.deskViewOk(view, s, which, pid)) return "";
   const head = (k, t, sub) => `<div class="dp-head ${lay}" data-r style="--i:0"><span class="k">${esc(k)}</span><div class="t">${esc(t)}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div>`;
   const when = r && r.ready ? (r.status === "live" ? `Live · ${scoreTxt(r)}` : r.winner ? `Final · ${scoreTxt(r)}` : `Best of ${esc(r.bo)}${r.at ? " · " + esc(OD.day(r.at)) + " · " + esc(OD.time(r.at)) + " CET" : ""}`) : "";
   const wings = (a, b) => `<div class="dp-w ${lay} A">${a}</div><div class="dp-w ${lay} B">${b}</div>`;
-  const o = lay === "solo" ? "v" : "h";
-  if (view === "upcoming") return head(r.status === "live" ? "Live now" : r.winner ? "Result" : "Up next", r.round, when) + wings(dpTeam(r, 0, o, 1), dpTeam(r, 1, o + " R", 2)) + (lay === "duo" ? `<div class="dp-vs" data-r style="--i:2">VS</div>` : "");
+  const o = lay === "solo" ? "v" : "h", vs = lay === "duo" ? `<div class="dp-vs" data-r style="--i:2">VS</div>` : "";
+  const mu = r && r.ready ? `${OD.tname(r.t[0])} vs ${OD.tname(r.t[1])}` : "";
+  // ---- analyst desk
+  if (view === "upcoming") return head(r.status === "live" ? "Live now" : r.winner ? "Result" : "Up next", r.round, when) + wings(dpTeam(r, 0, o, 1), dpTeam(r, 1, o + " R", 2)) + vs;
   if (view === "stats") { const done = M.list.filter(x => x.winner), maps = done.reduce((n, x) => n + (parseInt(x.s1, 10) || 0) + (parseInt(x.s2, 10) || 0), 0),
       sweeps = done.filter(x => /^[03]$/.test(String(x.s1)) && /^[03]$/.test(String(x.s2)) && x.s1 !== x.s2).length;
-    return head("Tournament so far", `${OD.tname(r.t[0])} vs ${OD.tname(r.t[1])}`, `${done.length} series · ${maps} maps played · ${sweeps} sweeps`) + wings(dpStats(r, 0, 1), dpStats(r, 1, 2)); }
-  if (view === "others") { const O = deskOthers(r), n = lay === "solo" ? 4 : 2;
-    const col = (title, xs, d) => `<div class="dp-ol"><div class="dp-ot" data-r style="--i:${d}">${title}</div>${xs.slice(0, n).map((x, k) => dpMatch(x, d + 1 + k)).join("") || `<div class="dp-none" data-r style="--i:${d + 1}">None</div>`}</div>`;
-    return head("Around the Major", "Other matches", r && r.ready ? `Excluding ${esc(OD.tname(r.t[0]))} vs ${esc(OD.tname(r.t[1]))}` : "") + wings(col("Results", O.res, 1), col("Live & up next", O.next, 2)); }
+    return head("Team comparison", mu, `${done.length} series · ${maps} maps played · ${sweeps} sweeps so far`) + wings(dpStats(r, 0, 1), dpStats(r, 1, 2)); }
+  if (view === "path") return head("Road to the", r.round, mu) + wings(dpPath(r, 0, 1), dpPath(r, 1, 2));
+  if (view === "stakes") return head("What's at stake", r.round, r.bid === "R6_GF" ? "Title decider" : !r.loseTo ? "Elimination match" : "Second life for the loser") + wings(dpStake(r, true, 1), dpStake(r, false, 2));
+  if (view === "player") { const p = M.player(pid), t = M.teamOfPlayer(pid);
+    return head("Player spotlight", p.name, t ? esc(t.name) + " · " + esc(r.round) : "") + wings(dpPlayer(pid, "A", lay, 1), dpPlayer(pid, "B", lay, 2)); }
+  if (view === "story") { const st = storylines(s, r), n = lay === "solo" ? 2 : 1;
+    const col = (xs, d) => xs.map((x, k) => `<div class="dp-story" data-r style="--i:${d + k}"><b>${esc(x.text)}</b><span>${esc(x.src || "")}</span></div>`).join("");
+    return head("Storylines", mu, esc(r.round)) + wings(col(st.slice(0, n), 1), col(st.slice(n, 2 * n), 2)); }
   if (view === "pred") { const picks = (s.pred.byMatch[r.id] || {}).picks || {}, show = c => c && picks[c.id];
     // dual: each pick under its caster's camera · solo: the on-camera caster, then the other caster if they picked
     let list = cams.filter(Boolean);
     if (lay === "solo") { const other = s.casters.find(c => c.name && !list.includes(c) && picks[c.id] && picks[c.id].team); if (other) list = list.concat(other); }
     const pk = (c, d) => c && c.name ? dpPick(r, c, show(c), preview && !(show(c) || {}).revealed, d) : "";
-    return head("Caster predictions", `${OD.tname(r.t[0])} vs ${OD.tname(r.t[1])}`, esc(r.round) + " · who wins?") + wings(pk(list[0], 1), pk(list[1], 2)); }
+    return head("Caster predictions", mu, esc(r.round) + " · who wins?") + wings(pk(list[0], 1), pk(list[1], 2)); }
+  // ---- caster desk
+  if (view === "series") { const ms = mapState(s, r);
+    const k = ms.done ? "Series over" : r.status === "live" || ms.a + ms.b > 0 ? (ms.cur ? "Live · map " + ms.cur.n : "Live") : "Up next";
+    return head(k, r.round, `Best of ${esc(r.bo)} · first to ${ms.need}${ms.cur ? " · now playing " + esc(ms.cur.m.name) : ""}`) + wings(dpTeam(r, 0, o, 1, ms.a), dpTeam(r, 1, o + " R", 2, ms.b)) + vs; }
+  if (view === "map") { const ms = mapState(s, r), a = ms.cur || ms.next, b = ms.cur ? ms.next : null;
+    return head(ms.cur ? "Now playing" : "Next map", a.m.name, `Map ${a.n} · ${mu} · series ${ms.a}–${ms.b}`) + wings(dpMapCard(a, ms.cur ? "Now playing" : "Up next", 1), b ? dpMapCard(b, "Up next", 2) : dpPBs(a, 2)); }
+  if (view === "maps") { const ms = mapState(s, r);
+    return head("Series progression", `${OD.tname(r.t[0])} ${ms.a}–${ms.b} ${OD.tname(r.t[1])}`, esc(r.round) + " · best of " + esc(r.bo)) + wings(dpGames(r, ms, 1), dpSeries(r, ms, 2)); }
+  if (view === "others") { const O = deskOthers(r), n = lay === "solo" ? 4 : 2;
+    const col = (title, xs, d) => `<div class="dp-ol"><div class="dp-ot" data-r style="--i:${d}">${title}</div>${xs.slice(0, n).map((x, k) => dpMatch(x, d + 1 + k)).join("") || `<div class="dp-none" data-r style="--i:${d + 1}">None</div>`}</div>`;
+    return head("Around the Major", "Other matches", r && r.ready ? `Excluding ${esc(OD.tname(r.t[0]))} vs ${esc(OD.tname(r.t[1]))}` : "") + wings(col("Results", O.res, 1), col("Live & up next", O.next, 2)); }
   return "";
 }
-SC.desk = (root, preview) => {
+SC.desk = (root, preview, which) => {
+  // which = "analyst" → Pre-show / Analyst Desk (its own state); otherwise Match / Caster Desk. Same cameras and names.
+  const pick = s => which === "analyst" ? Object.assign({}, s, { desk: s.adesk, deskShow: s.adeskShow, deskProfiles: s.adeskProfiles })
+    : Object.assign({}, s, { casters: s.mcasters || [] });                  // Caster Desk: its own camera profiles
+  const LAYS = which === "analyst" ? SC.DESK : SC.CDESK;
   root.innerHTML = `<div class="stage desk" id="st"><video id="vid" muted loop autoplay playsinline></video><div id="cams"></div><div id="frames"></div><div id="lts"></div><div class="dp view" id="dp"></div><div id="decor"></div></div>`;
   const dp = root.querySelector("#dp"), ltEl = root.querySelector("#lts"), pgm = /(^|[#&])pgm(&|$)/.test(location.hash);
   let dpKey = null, dpHTML = null, dpOut = null, dpSet = null, lastLt = "";
@@ -606,9 +700,9 @@ SC.desk = (root, preview) => {
   OD.fit(st);
   let PRIV = null, privRev = null, lastFrames = "", lastDecor = "";
   const iframes = {};                                       // camera id → iframe, kept alive across solo/dual switches
-  const loadPriv = async s => { if (s.privRev === privRev) return; privRev = s.privRev; PRIV = await OD.getPrivate(); render(OD.S); };
+  const loadPriv = async s => { if (s.privRev === privRev) return; privRev = s.privRev; PRIV = await OD.getPrivate(); render(pick(OD.S)); };
   function render(s) {
-    const d = s.desk, L = SC.DESK[d.layout] || SC.DESK.duo, ids = (s.deskProfiles[d.layout] || []).slice(0, L.slots.length);
+    const d = s.desk, L = LAYS[d.layout] || LAYS.duo, ids = (s.deskProfiles[d.layout] || []).slice(0, L.slots.length);
     const want = d.bg ? OD.brand(L.video) : null;
     vid.style.display = want ? "" : "none";
     if (want && vid.getAttribute("src") !== want) { vid.setAttribute("src", want); vid.play().catch(() => {}); }
@@ -618,7 +712,7 @@ SC.desk = (root, preview) => {
     const integrated = d.mode === "integrated" && d.cams && !preview && PRIV;
     st.classList.toggle("local", d.mode !== "integrated");
     const casters = Object.fromEntries((s.casters || []).map(c => [c.id, c]));
-    const needed = new Set(integrated ? ["c1", "c2"].filter(id => d.preload || ids.includes(id)) : []);
+    const needed = new Set(integrated ? (which === "analyst" ? ["c1", "c2"] : ["m1", "m2", "m3"]).filter(id => d.preload || ids.includes(id)) : []);
     for (const id of Object.keys(iframes)) if (!needed.has(id) || !(PRIV && (PRIV.casters[id] || {}).vdo)) { iframes[id].remove(); delete iframes[id]; }
     for (const id of needed) {
       const vdo = (PRIV.casters[id] || {}).vdo; if (!vdo) continue;
@@ -644,18 +738,19 @@ SC.desk = (root, preview) => {
     if (fr !== lastFrames) { frEl.innerHTML = fr; lastFrames = fr; }
     let dc = "";
     if (d.decor && r && r.ready) dc = `<div class="dstrip"><span class="k">${r.status === "live" ? "Live" : r.winner ? "Result" : "Up next"}</span>${OD.logo(r.t[0], "lg")}<b>${esc(OD.tname(r.t[0]))}</b>${r.winner || r.status === "live" ? `<span class="sc">${scoreTxt(r)}</span>` : `<i>vs</i>`}<b>${esc(OD.tname(r.t[1]))}</b>${OD.logo(r.t[1], "lg")}<span class="rd">${esc(r.round)}${!r.winner && r.status !== "live" && r.at ? " · " + esc(OD.time(r.at)) + " CET" : ""}</span></div>`;
+    if (which !== "analyst" && d.bg && d.layout === "solo") dc += `<div class="dk-tag">Casters booth</div>`;   // the solo loop is the analyst one
     if (dc !== lastDecor) { decor.innerHTML = dc; lastDecor = dc; }
     // presentation state around the cameras (never changes on its own: preview → Take → live)
-    const view = preview && !pgm ? s.deskShow.preview : s.deskShow.live;
-    const ph = deskPanelHTML(view, s, d.layout === "solo" ? "solo" : "duo", ids.map(id => casters[id]), preview && !pgm);
-    swap(view + ":" + d.layout + ":" + (r ? r.id : ""), ph);
+    const pv = preview && !pgm, view = pv ? s.deskShow.preview : s.deskShow.live, vpid = pv ? s.deskShow.ppid : s.deskShow.lpid;
+    const ph = deskPanelHTML(view, s, d.layout === "solo" ? "solo" : d.layout === "trio" ? "trio" : "duo", ids.map(id => casters[id]), pv, which === "analyst" ? "analyst" : "desk", vpid);
+    swap(view + ":" + (vpid || "") + ":" + d.layout + ":" + (r ? r.id : ""), ph);
     // optional lower thirds: large name straps over the bottom of each camera
     let lt = "";
     if (s.deskShow.lt) L.slots.forEach((sl, i) => { const c = casters[ids[i]]; if (!c || !c.name) return;
       lt += `<div class="dlt ${d.layout}" style="left:${sl.x + 26}px;top:${sl.y + sl.h - (d.layout === "solo" ? 128 : 112)}px"><b>${esc(c.name)}</b>${c.role || c.handle ? `<span>${c.role ? `<i>${esc(c.role)}</i>` : ""}${c.handle ? `<em>${esc(c.handle)}</em>` : ""}</span>` : ""}</div>`; });
     if (lt !== lastLt) { ltEl.innerHTML = lt; lastLt = lt; }
   }
-  OD.onState(s => { loadPriv(s); render(s); });
+  OD.onState(s => { s = pick(s); loadPriv(s); render(s); });
 };
 
 /* ======================================================================= caster predictions */
