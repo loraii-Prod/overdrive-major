@@ -1,4 +1,4 @@
-/* OverDrive Major: on-air scenes. Every scene renders from OD.S / OD.M only and hides what it has no data for. */
+/* OverDrive event template: on-air scenes. Every scene renders from OD.S / OD.M only and hides what it has no data for. */
 "use strict";
 (() => {
 const SC = window.SC = {};
@@ -26,13 +26,15 @@ function matchRow(r, opts) {
 SC.matchRow = matchRow;
 function stakesOf(r) {
   const where = to => to ? OD.roundName(to.bid) : null;
-  if (r.bid === "R6_GF") return [{ k: "Winner", v: "OverDrive Major champion" }, { k: "Loser", v: "2nd place" }];
+  if (r.bid === "R6_GF") return [{ k: "Winner", v: EVN() + " champion" }, { k: "Loser", v: "2nd place" }];
   return [{ k: "Winner", v: r.winTo ? "to the " + where(r.winTo) : "advances" },
     { k: "Loser", v: r.loseTo ? "drops to the " + where(r.loseTo) : (r.elimPlace ? "eliminated · " + r.elimPlace : "eliminated") }];
 }
 SC.stakesOf = stakesOf;
 const nextUp = M => M.active || M.list.find(r => r.ready && !r.winner && r.status !== "void");
-const eventLine = () => { const e = OD.M.event; return e ? [`OverDrive Major`, e.dates, "8 teams · double elimination"] : ["OverDrive Major"]; };
+const EV = () => OD.M.event || {};
+const EVN = () => EV().short || EV().name || "Tournament";
+const eventLine = () => [EVN(), EV().dates, EV().formatShort].filter(Boolean);
 
 /* Full-screen frame: looping background mounted once (never restarts), vignette, corner label, event logo, a view
    that cross-fades between internal states, and the bottom bar. */
@@ -129,7 +131,7 @@ const GFX = {
   upcoming() { const rs = OD.M.others().filter(r => !r.winner && r.status !== "live" && r.status !== "void").slice(0, 3); if (!rs.length) return null; return card("Coming up", rs.map(r => matchRow(r, { time: true })).join("")); },
   result(p) {
     const r = OD.M.byId[p.mid]; if (!r || !r.ready || (!r.winner && r.status !== "live")) return null;
-    const foot = r.winner ? `${esc(OD.tname(r.winner))} ${r.winTo ? "advance to the " + esc(OD.roundName(r.winTo.bid)) : (r.bid === "R6_GF" ? "are the OverDrive Major champions" : "advance")} · ${esc(OD.tname(r.loser))} ${r.loseTo ? "drop to the " + esc(OD.roundName(r.loseTo.bid)) : "are eliminated" + (r.elimPlace ? " (" + r.elimPlace + ")" : "")}` : "";
+    const foot = r.winner ? `${esc(OD.tname(r.winner))} ${r.winTo ? "advance to the " + esc(OD.roundName(r.winTo.bid)) : (r.bid === "R6_GF" ? "are the " + esc(EVN()) + " champions" : "advance")} · ${esc(OD.tname(r.loser))} ${r.loseTo ? "drop to the " + esc(OD.roundName(r.loseTo.bid)) : "are eliminated" + (r.elimPlace ? " (" + r.elimPlace + ")" : "")}` : "";
     return card(r.winner ? "Result · " + r.round : "Live · " + r.round, matchRow(r, { noRound: true }), { foot });
   },
   stakes(p) { const r = OD.M.byId[p.mid] || OD.M.active; if (!r || !r.ready) return null;
@@ -156,7 +158,7 @@ const GFX = {
   fact(p) { const f = (OD.S.facts || []).find(x => x.id === p.fid); if (!f) return null;
     const subj = f.subject.type === "team" ? teamChip(f.subject.id) : f.subject.type === "player" ? `<b>${esc(pname(f.subject.id))}</b> ${OD.nat(f.subject.id)}` : "";
     return card("Did you know", `<div class="fact">${esc(f.text)}</div>`, { ctx: subj, foot: f.source ? "Source: " + esc(f.source) : "" }); },
-  custom(p) { if (!p.text && !p.title) return null; return card(p.kicker || "OverDrive Major", `${p.title ? `<div class="big">${esc(p.title)}</div>` : ""}${p.text ? `<div class="fact" style="margin-top:6px">${esc(p.text)}</div>` : ""}`); }
+  custom(p) { if (!p.text && !p.title) return null; return card(p.kicker || EVN(), `${p.title ? `<div class="big">${esc(p.title)}</div>` : ""}${p.text ? `<div class="fact" style="margin-top:6px">${esc(p.text)}</div>` : ""}`); }
 };
 const norm = OD.norm;
 SC.GFX = GFX;
@@ -197,7 +199,7 @@ const BLAYOUT = {
 SC.bracketHTML = (opts, inner) => {
   const M = OD.M, o = Object.assign({ title: true, times: true, seeds: true, opacity: 100 }, opts || {});
   const pos = id => { const p = BLAYOUT[id]; return p ? { x: BX.cols[p[0]], y: p[1] } : null; };
-  let h = o.title ? `<div class="hdr"><div class="kicker">OverDrive Major 2026</div><h1>Tournament <em>bracket</em></h1></div>` : "";
+  let h = o.title ? `<div class="hdr"><div class="kicker">${esc(EV().kicker || EVN())}</div><h1>Tournament <em>bracket</em></h1></div>` : "";
   h += `<div class="sect lo" style="left:350px;top:672px">Lower bracket</div>`;
   const paths = [];
   for (const r of Object.values(M.byBid)) {
@@ -350,7 +352,7 @@ function journeyHTML(r) {
     return `<g class="jr-dot ${p.won ? "won" : ""}" style="--d:${rowDelay(k) + 200}ms"><path d="M${side === "L" ? 862 : 1058} ${y} H${x}"/><rect x="${x - 9}" y="${y - 9}" width="18" height="18" transform="rotate(45 ${x} ${y})"/></g>`; }).join("");
   const live = r.status === "live" || r.winner;
   const now = `<div class="jr-now" data-r style="--d:${nowDelay}ms"><div class="jr-now-k">${live ? (r.winner ? "Final" : "Live now") : "Up now"}</div>
-    <div class="jr-now-b">${tlogo(r.t[0])}<div class="jr-now-m"><b class="fit">${esc(r.round)}</b><span>${live ? `${esc(r.s1 || 0)}–${esc(r.s2 || 0)}` : `Best of ${esc(r.bo)}${r.at ? " · " + esc(OD.time(r.at)) + " CET" : ""}`}</span></div>${tlogo(r.t[1])}</div></div>`;
+    <div class="jr-now-b">${tlogo(r.t[0])}<div class="jr-now-m"><b class="fit">${esc(r.round)}</b><span>${live ? `${esc(r.s1 || 0)}–${esc(r.s2 || 0)}` : `Best of ${esc(r.bo)}${r.at ? " · " + esc(OD.time(r.at)) + OD.tz() : ""}`}</span></div>${tlogo(r.t[1])}</div></div>`;
   return `<div class="jr" style="--rh:${rh}px;--dur:${dur}s;--d0:${base}ms">
     <div class="jr-title" data-r style="--d:0ms"><span class="lbl">Road to the</span><div class="d-m">${esc(r.round)}</div></div>
     ${head(J[0], "L")}${head(J[1], "R")}
@@ -392,7 +394,7 @@ function stakesHTML(r) {
   // winner
   const W0 = 1150;
   const prizeBig = (p, d, cls) => pz(p) ? `<div class="sk-prize ${cls}" data-r style="--d:${d}ms"><span>Prize money</span><b>${esc(pz(p))}</b></div>` : "";
-  const winBody = gf ? `<div class="sk-big" data-r style="--d:${W0 + 200}ms">Champions</div><div class="sk-sub" data-r style="--d:${W0 + 350}ms">OverDrive Major winners</div>${prizeBig("1st", W0 + 550, "go")}`
+  const winBody = gf ? `<div class="sk-big" data-r style="--d:${W0 + 200}ms">Champions</div><div class="sk-sub" data-r style="--d:${W0 + 350}ms">${esc(EVN())} winners</div>${prizeBig("1st", W0 + 550, "go")}`
     : `<div class="sk-head" data-r style="--d:${W0 + 100}ms">Advances to the <b>${esc(roundTitle(win))}</b></div>${routeHTML(r, r.winTo, "w", W0 + 250)}${oppHTML(M.opponentFor(r.winTo), W0 + 250 + 520)}`;
   const winFoot = winFloor && !gf ? `<div class="sk-foot" data-r style="--d:${W0 + 900}ms"><span>${gf ? "Finishes" : "Guaranteed"}</span><b>${esc(gf ? "1st" : winFloor + " or better")}</b>${pz(winFloor) ? `<em>${esc(pz(winFloor))}${gf ? "" : "<small>at least</small>"}</em>` : ""}</div>` : "";
   // loser
@@ -418,7 +420,7 @@ SC.matchup = (root, preview) => {
     F.bg(sc.bg); F.chrome(r ? "Matchup" : "");
     let view = st.view; if (!SC.matchupViews(r).includes(view)) view = "versus";
     if (!r || !r.ready) { F.bar(""); return F.show("empty", ""); }
-    F.bar(barHTML([r.round, "Best of " + r.bo].concat(r.at && !r.winner ? [OD.day(r.at) + " · " + OD.time(r.at) + " CET"] : [])));
+    F.bar(barHTML([r.round, "Best of " + r.bo].concat(r.at && !r.winner ? [OD.day(r.at) + " · " + OD.time(r.at) + OD.tz()] : [])));
     const top = `<div class="mu-top" data-r><div class="d-m">${esc(r.round)}</div></div>`;
     if (view === "stakes") return F.show(r.id + ":stakes:" + (r.winTo ? r.winTo.bid : ""), stakesHTML(r), 4600);
     if (view === "path") { const h = journeyHTML(r); F.show(r.id + ":path", h, 1000 + (Math.max(1, ...r.t.map(id => journeyOf(r, id).played.length)) + 2) * 380 + 900);
@@ -446,7 +448,7 @@ function showcase(pid, opts) {
       ${opts.mid || ""}
       ${stats.length ? `<div class="tv-stats">${stats.map(([k, b, hot], n) => `<div class="tv-stat" data-r style="--d:${420 + n * 90}ms"><small>${esc(k)}</small><b class="${hot ? "hot" : ""}">${esc(b)}</b></div>`).join("")}</div>` : ""}
       ${ach.length && opts.rows ? `<div class="tv-list" data-r style="--d:700ms"><h3>Honours</h3>${ach.map(a => `<div class="r"><span>${esc(yr(a.date))}</span><b class="${/^1st/.test(a.place) ? "gold" : ""}">${esc(a.place)}</b><i>${esc(a.event)}</i></div>`).join("")}</div>` : ""}
-      ${v && opts.src !== false ? `<div class="sc2-src" data-r style="--d:900ms">Source: Liquipedia, read 9–10 Nov 2026</div>` : ""}</div></div>`;
+      ${v && opts.src !== false ? (EV().careerSource ? `<div class="sc2-src" data-r style="--d:900ms">Source: ${esc(EV().careerSource)}</div>` : "") : ""}</div></div>`;
 }
 const profileHTML = pid => showcase(pid, { stats: true, rows: 5 });
 function compareHTML(a, b) {
@@ -465,7 +467,7 @@ function compareHTML(a, b) {
   return `<div class="cp seq">${ph(a, "a", 0)}${ph(b, "b", 120)}
     <div class="cp-mid"><div class="k" data-r style="--d:250ms">Player comparison</div><div class="h" data-r style="--d:320ms"><span>${esc(pname(a))}</span><i>vs</i><span>${esc(pname(b))}</span></div>
       ${rows.map(([k, x, y, logo, hot, small], n) => `<div class="cp-r ${small ? "sm" : ""}" data-r style="--d:${520 + n * 110}ms"><b class="${hot ? "hot" : ""}">${x}</b><span>${esc(k)}</span><b class="${hot ? "hot" : ""}">${y}</b></div>`).join("")}
-      <div class="sc2-src" data-r style="--d:1200ms;text-align:center">Source: Liquipedia, read 9–10 Nov 2026</div></div></div>`;
+      ${EV().careerSource ? `<div class="sc2-src" data-r style="--d:1200ms;text-align:center">Source: ${esc(EV().careerSource)}</div>` : ""}</div></div>`;
 }
 SC.player = (root, preview) => {
   const F = mountFS(root, "bar", "pl");
@@ -502,7 +504,7 @@ SC.maps = (root, preview) => {
   OD.onState(s => {
     const sc = s.scenes.maps, st = preview ? sc.preview : sc.live, p = st.params || {};
     const html = st.view === "map" ? mapHTML(p.id) : poolHTML(p.current);
-    F.bg(sc.bg); F.chrome(html ? "Maps" : ""); F.bar(html ? barHTML(["OverDrive Major", "TMWT Duos", "Bo5"]) : "");
+    F.bg(sc.bg); F.chrome(html ? "Maps" : ""); F.bar(html ? barHTML([EVN(), EV().game, EV().bo].filter(Boolean)) : "");
     F.show(st.view + ":" + (p.id || p.current || ""), html);
   });
 };
@@ -515,7 +517,7 @@ function resultHTML(r) {
     return `<div class="rs-t ${i ? "R" : "L"} ${w ? "w" : "l"}" data-r="${i ? "r" : "l"}" style="--d:${150 + i * 100}ms">${w ? `<span class="rs-tag">Winner</span>` : ""}${tlogo(id)}<div class="nm" style="font-size:${fitPx(OD.tname(id), 96, 9)}px">${esc(OD.tname(id))}</div></div>`; };
   const win = r.winTo ? M.byBid[r.winTo.bid] : null, lose = r.loseTo ? M.byBid[r.loseTo.bid] : null;
   const out = (cls, team, txt, extra, d) => `<div class="rs-o ${cls}" data-r style="--d:${d}ms">${tlogo(team)}<div><b>${esc(OD.tname(team))}</b><span>${txt}</span></div>${extra ? `<em>${esc(extra)}</em>` : ""}</div>`;
-  const wTxt = gf ? "OverDrive Major champions" : win ? "advance to the " + esc(roundTitle(win)) : "advance";
+  const wTxt = gf ? esc(EVN()) + " champions" : win ? "advance to the " + esc(roundTitle(win)) : "advance";
   const lTxt = gf ? "finish 2nd" : lose ? "drop to the " + esc(roundTitle(lose)) : "eliminated · " + esc(r.elimPlace || "");
   return `<div class="rs seq"><div class="tv-pa" data-r="l" style="--d:0ms"></div><div class="tv-pb" data-r="r" style="--d:0ms"></div>
     <div class="rs-top"><div class="k" data-r style="--d:100ms">Final result</div><div class="h" data-r style="--d:160ms">${esc(r.round)}</div></div>
@@ -647,7 +649,7 @@ function deskPanelHTML(view, s, lay, cams, preview, which, pid) {
   const M = OD.M, r = M.active;
   if (view === "clean" || !SC.deskViewOk(view, s, which, pid)) return "";
   const head = (k, t, sub) => `<div class="dp-head ${lay}" data-r style="--i:0"><span class="k">${esc(k)}</span><div class="t">${esc(t)}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div>`;
-  const when = r && r.ready ? (r.status === "live" ? `Live · ${scoreTxt(r)}` : r.winner ? `Final · ${scoreTxt(r)}` : `Best of ${esc(r.bo)}${r.at ? " · " + esc(OD.day(r.at)) + " · " + esc(OD.time(r.at)) + " CET" : ""}`) : "";
+  const when = r && r.ready ? (r.status === "live" ? `Live · ${scoreTxt(r)}` : r.winner ? `Final · ${scoreTxt(r)}` : `Best of ${esc(r.bo)}${r.at ? " · " + esc(OD.day(r.at)) + " · " + esc(OD.time(r.at)) + OD.tz() : ""}`) : "";
   const wings = (a, b) => `<div class="dp-w ${lay} A">${a}</div><div class="dp-w ${lay} B">${b}</div>`;
   const o = lay === "solo" ? "v" : "h", vs = lay === "duo" ? `<div class="dp-vs" data-r style="--i:2">VS</div>` : "";
   const mu = r && r.ready ? `${OD.tname(r.t[0])} vs ${OD.tname(r.t[1])}` : "";
@@ -737,7 +739,7 @@ SC.desk = (root, preview, which) => {
     });
     if (fr !== lastFrames) { frEl.innerHTML = fr; lastFrames = fr; }
     let dc = "";
-    if (d.decor && r && r.ready) dc = `<div class="dstrip"><span class="k">${r.status === "live" ? "Live" : r.winner ? "Result" : "Up next"}</span>${OD.logo(r.t[0], "lg")}<b>${esc(OD.tname(r.t[0]))}</b>${r.winner || r.status === "live" ? `<span class="sc">${scoreTxt(r)}</span>` : `<i>vs</i>`}<b>${esc(OD.tname(r.t[1]))}</b>${OD.logo(r.t[1], "lg")}<span class="rd">${esc(r.round)}${!r.winner && r.status !== "live" && r.at ? " · " + esc(OD.time(r.at)) + " CET" : ""}</span></div>`;
+    if (d.decor && r && r.ready) dc = `<div class="dstrip"><span class="k">${r.status === "live" ? "Live" : r.winner ? "Result" : "Up next"}</span>${OD.logo(r.t[0], "lg")}<b>${esc(OD.tname(r.t[0]))}</b>${r.winner || r.status === "live" ? `<span class="sc">${scoreTxt(r)}</span>` : `<i>vs</i>`}<b>${esc(OD.tname(r.t[1]))}</b>${OD.logo(r.t[1], "lg")}<span class="rd">${esc(r.round)}${!r.winner && r.status !== "live" && r.at ? " · " + esc(OD.time(r.at)) + OD.tz() : ""}</span></div>`;
     if (which !== "analyst" && d.bg && d.layout === "solo") dc += `<div class="dk-tag">Casters booth</div>`;   // the solo loop is the analyst one
     if (dc !== lastDecor) { decor.innerHTML = dc; lastDecor = dc; }
     // presentation state around the cameras (never changes on its own: preview → Take → live)
@@ -801,7 +803,7 @@ function breakPanelHTML(p) {
   if (p.k === "next") { const r = p.r;
     return `<div class="bk-p bk-next"><div class="bk-k">${r.status === "live" ? "Live now" : "Up next"} · ${esc(r.round)}</div>
       <div class="bk-line">${[0, 1].map(i => `<div class="bk-nt ${i ? "R" : ""}">${tlogo(r.t[i])}<b style="font-size:${fitPx(OD.tname(r.t[i]), 72, 9)}px">${esc(OD.tname(r.t[i]))}</b></div>${i ? "" : `<div class="bk-vs">VS</div>`}`).join("")}</div>
-      <div class="bk-when">Best of ${esc(r.bo)}${r.at && r.status !== "live" ? " · " + esc(OD.day(r.at)) + " · " + esc(OD.time(r.at)) + " CET" : ""}</div></div>`; }
+      <div class="bk-when">Best of ${esc(r.bo)}${r.at && r.status !== "live" ? " · " + esc(OD.day(r.at)) + " · " + esc(OD.time(r.at)) + OD.tz() : ""}</div></div>`; }
   if (p.k === "live") return list("Live now", M.list.filter(r => r.status === "live").slice(0, 3));
   if (p.k === "upcoming") return list("Coming up", M.list.filter(r => !r.winner && r.status === "upcoming").slice(0, 3));
   if (p.k === "results") return list("Latest results", M.list.filter(r => r.winner).slice(-3).reverse());

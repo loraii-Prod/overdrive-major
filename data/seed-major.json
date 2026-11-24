@@ -1,67 +1,592 @@
 {
-  "_note": "Snapshot of the OverDrive Major Google Sheet (gviz), read 2026-11-21 ~18:45 CET. Used only when the live sheet and data/cache-major.json are both unavailable.",
-  "fetchedAt": "2026-11-21T17:45:00.000Z",
-  "teams": [
-    { "id": "TEAM_0001", "name": "BIG", "seed": 1, "players": ["PLAYER_0001", "PLAYER_0002"], "subs": [] },
-    { "id": "TEAM_0004", "name": "FUT x Heav", "seed": 2, "players": ["PLAYER_0003", "PLAYER_0004"], "subs": [] },
-    { "id": "TEAM_0009", "name": "Airwalkers", "seed": 3, "players": ["PLAYER_0005", "PLAYER_0006"], "subs": [] },
-    { "id": "TEAM_0007", "name": "COOK", "seed": 4, "players": ["PLAYER_0007", "PLAYER_0008"], "subs": [] },
-    { "id": "TEAM_0006", "name": "NAVI x Joel", "seed": 5, "players": ["PLAYER_0013", "PLAYER_0014"], "subs": [] },
-    { "id": "TEAM_0014", "name": "Ragnarok", "seed": 6, "players": ["PLAYER_0018", "PLAYER_0019"], "subs": ["PLAYER_0020"] },
-    { "id": "TEAM_0002", "name": "All Gamers", "seed": 7, "players": ["PLAYER_0009", "PLAYER_0010"], "subs": ["PLAYER_0011", "PLAYER_0012"] },
-    { "id": "TEAM_0012", "name": "rnboi", "seed": 8, "players": ["PLAYER_0015", "PLAYER_0016"], "subs": [] }
+ "_note": "Placeholder event (template). Replace by pointing Settings → Event sheet CSV at your event's Google Sheet, or edit this file: teams, players, bracket slots (structure: 8-team double elimination) and matches [id, bracket_id, 'MM/DD/YYYY HH:MM', team1, team2, status, bestOf, score1, score2, winner].",
+ "fetchedAt": null,
+ "teams": [
+  {
+   "id": "TEAM_0001",
+   "name": "Team 1",
+   "seed": 1,
+   "players": [
+    "PLAYER_0001",
+    "PLAYER_0002"
+   ],
+   "subs": []
+  },
+  {
+   "id": "TEAM_0002",
+   "name": "Team 2",
+   "seed": 2,
+   "players": [
+    "PLAYER_0003",
+    "PLAYER_0004"
+   ],
+   "subs": []
+  },
+  {
+   "id": "TEAM_0003",
+   "name": "Team 3",
+   "seed": 3,
+   "players": [
+    "PLAYER_0005",
+    "PLAYER_0006"
+   ],
+   "subs": []
+  },
+  {
+   "id": "TEAM_0004",
+   "name": "Team 4",
+   "seed": 4,
+   "players": [
+    "PLAYER_0007",
+    "PLAYER_0008"
+   ],
+   "subs": []
+  },
+  {
+   "id": "TEAM_0005",
+   "name": "Team 5",
+   "seed": 5,
+   "players": [
+    "PLAYER_0009",
+    "PLAYER_0010"
+   ],
+   "subs": []
+  },
+  {
+   "id": "TEAM_0006",
+   "name": "Team 6",
+   "seed": 6,
+   "players": [
+    "PLAYER_0011",
+    "PLAYER_0012"
+   ],
+   "subs": []
+  },
+  {
+   "id": "TEAM_0007",
+   "name": "Team 7",
+   "seed": 7,
+   "players": [
+    "PLAYER_0013",
+    "PLAYER_0014"
+   ],
+   "subs": []
+  },
+  {
+   "id": "TEAM_0008",
+   "name": "Team 8",
+   "seed": 8,
+   "players": [
+    "PLAYER_0015",
+    "PLAYER_0016"
+   ],
+   "subs": []
+  }
+ ],
+ "players": [
+  {
+   "id": "PLAYER_0001",
+   "name": "Player 1A",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0002",
+   "name": "Player 1B",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0003",
+   "name": "Player 2A",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0004",
+   "name": "Player 2B",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0005",
+   "name": "Player 3A",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0006",
+   "name": "Player 3B",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0007",
+   "name": "Player 4A",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0008",
+   "name": "Player 4B",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0009",
+   "name": "Player 5A",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0010",
+   "name": "Player 5B",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0011",
+   "name": "Player 6A",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0012",
+   "name": "Player 6B",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0013",
+   "name": "Player 7A",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0014",
+   "name": "Player 7B",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0015",
+   "name": "Player 8A",
+   "nat": ""
+  },
+  {
+   "id": "PLAYER_0016",
+   "name": "Player 8B",
+   "nat": ""
+  }
+ ],
+ "slots": [
+  [
+   "R1_UB1",
+   "winners",
+   1,
+   1,
+   "seed",
+   null,
+   1
   ],
-  "players": [
-    { "id": "PLAYER_0001", "name": "Granady", "nat": "Germany" },
-    { "id": "PLAYER_0002", "name": "Massa", "nat": "Germany" },
-    { "id": "PLAYER_0003", "name": "Nayko", "nat": "France" },
-    { "id": "PLAYER_0004", "name": "Heav", "nat": "France" },
-    { "id": "PLAYER_0005", "name": "Stufts", "nat": "Netherlands" },
-    { "id": "PLAYER_0006", "name": "Whizzy", "nat": "United Kingdom" },
-    { "id": "PLAYER_0007", "name": "L1ngo", "nat": "Canada" },
-    { "id": "PLAYER_0008", "name": "Scrapie", "nat": "Belgium" },
-    { "id": "PLAYER_0009", "name": "Binkss", "nat": "France" },
-    { "id": "PLAYER_0010", "name": "Gwen", "nat": "France" },
-    { "id": "PLAYER_0011", "name": "Otaaaq", "nat": "France" },
-    { "id": "PLAYER_0012", "name": "Alfadream", "nat": "France" },
-    { "id": "PLAYER_0013", "name": "mime", "nat": "Poland" },
-    { "id": "PLAYER_0014", "name": "eLconn21", "nat": "Czech Republic" },
-    { "id": "PLAYER_0015", "name": "Walegen", "nat": "France" },
-    { "id": "PLAYER_0016", "name": "NablaTM", "nat": "France" },
-    { "id": "PLAYER_0018", "name": "Epos", "nat": "United Kingdom" },
-    { "id": "PLAYER_0019", "name": "Melioo", "nat": "France" },
-    { "id": "PLAYER_0020", "name": "Evon", "nat": "Poland" }
+  [
+   "R1_UB1",
+   "winners",
+   1,
+   2,
+   "seed",
+   null,
+   8
   ],
-  "slots": [
-    ["R1_UB1","winners",1,1,"seed",null,1], ["R1_UB1","winners",1,2,"seed",null,8],
-    ["R1_UB2","winners",1,1,"seed",null,4], ["R1_UB2","winners",1,2,"seed",null,6],
-    ["R1_UB3","winners",1,1,"seed",null,3], ["R1_UB3","winners",1,2,"seed",null,5],
-    ["R1_UB4","winners",1,1,"seed",null,2], ["R1_UB4","winners",1,2,"seed",null,7],
-    ["R2_UB1","winners",2,1,"W","R1_UB1",1], ["R2_UB1","winners",2,2,"W","R1_UB2",4],
-    ["R2_UB2","winners",2,1,"W","R1_UB3",3], ["R2_UB2","winners",2,2,"W","R1_UB4",2],
-    ["R2_LB1","losers",2,1,"L","R1_UB1",8], ["R2_LB1","losers",2,2,"L","R1_UB2",6],
-    ["R2_LB2","losers",2,1,"L","R1_UB3",5], ["R2_LB2","losers",2,2,"L","R1_UB4",7],
-    ["R3_UBF","winners",3,1,"W","R2_UB1",1], ["R3_UBF","winners",3,2,"W","R2_UB2",2],
-    ["R3_LB1","losers",3,1,"L","R2_UB2",3], ["R3_LB1","losers",3,2,"W","R2_LB1",6],
-    ["R3_LB2","losers",3,1,"L","R2_UB1",4], ["R3_LB2","losers",3,2,"W","R2_LB2",5],
-    ["R4_LBF","losers",4,1,"W","R3_LB1",3], ["R4_LBF","losers",4,2,"W","R3_LB2",4],
-    ["R5_CF","losers",5,1,"L","R3_UBF",2], ["R5_CF","losers",5,2,"W","R4_LBF",3],
-    ["R6_GF","grandfinal",6,1,"W","R3_UBF",1], ["R6_GF","grandfinal",6,2,"W","R5_CF",2]
+  [
+   "R1_UB2",
+   "winners",
+   1,
+   1,
+   "seed",
+   null,
+   4
   ],
-  "matches": [
-    ["MATCH_0031","R1_UB1","11/21/2026 15:00","TEAM_0001","TEAM_0012","COMPLETED",5,"3","0","TEAM_0001"],
-    ["MATCH_0032","R1_UB2","11/21/2026 15:00","TEAM_0007","TEAM_0014","COMPLETED",5,"0","3","TEAM_0014"],
-    ["MATCH_0033","R1_UB3","11/21/2026 15:00","TEAM_0009","TEAM_0006","COMPLETED",5,"0","3","TEAM_0006"],
-    ["MATCH_0034","R1_UB4","11/21/2026 15:00","TEAM_0004","TEAM_0002","COMPLETED",5,"0","3","TEAM_0002"],
-    ["MATCH_0035","R2_UB1","11/21/2026 17:00","TEAM_0001","TEAM_0014","COMPLETED",5,"0","3","TEAM_0014"],
-    ["MATCH_0036","R2_UB2","11/21/2026 17:30","TEAM_0006","TEAM_0002","COMPLETED",5,"1","3","TEAM_0002"],
-    ["MATCH_0037","R2_LB1","11/21/2026 16:00","TEAM_0012","TEAM_0007","COMPLETED",5,"3","1","TEAM_0012"],
-    ["MATCH_0038","R2_LB2","11/21/2026 16:00","TEAM_0009","TEAM_0004","COMPLETED",5,"0","3","TEAM_0004"],
-    ["MATCH_0039","R3_UBF","11/22/2026 17:00","TEAM_0014","TEAM_0002","UPCOMING",5,"","",""],
-    ["MATCH_0040","R3_LB1","11/22/2026 15:00","TEAM_0006","TEAM_0012","UPCOMING",5,"","",""],
-    ["MATCH_0041","R3_LB2","11/22/2026 15:00","TEAM_0001","TEAM_0004","UPCOMING",5,"","",""],
-    ["MATCH_0042","R4_LBF","11/22/2026 16:00","","","UPCOMING",5,"","",""],
-    ["MATCH_0043","R5_CF","11/22/2026 18:00","","","UPCOMING",5,"","",""],
-    ["MATCH_0044","R6_GF","11/22/2026 19:00","","","UPCOMING",5,"","",""]
+  [
+   "R1_UB2",
+   "winners",
+   1,
+   2,
+   "seed",
+   null,
+   6
+  ],
+  [
+   "R1_UB3",
+   "winners",
+   1,
+   1,
+   "seed",
+   null,
+   3
+  ],
+  [
+   "R1_UB3",
+   "winners",
+   1,
+   2,
+   "seed",
+   null,
+   5
+  ],
+  [
+   "R1_UB4",
+   "winners",
+   1,
+   1,
+   "seed",
+   null,
+   2
+  ],
+  [
+   "R1_UB4",
+   "winners",
+   1,
+   2,
+   "seed",
+   null,
+   7
+  ],
+  [
+   "R2_UB1",
+   "winners",
+   2,
+   1,
+   "W",
+   "R1_UB1",
+   1
+  ],
+  [
+   "R2_UB1",
+   "winners",
+   2,
+   2,
+   "W",
+   "R1_UB2",
+   4
+  ],
+  [
+   "R2_UB2",
+   "winners",
+   2,
+   1,
+   "W",
+   "R1_UB3",
+   3
+  ],
+  [
+   "R2_UB2",
+   "winners",
+   2,
+   2,
+   "W",
+   "R1_UB4",
+   2
+  ],
+  [
+   "R2_LB1",
+   "losers",
+   2,
+   1,
+   "L",
+   "R1_UB1",
+   8
+  ],
+  [
+   "R2_LB1",
+   "losers",
+   2,
+   2,
+   "L",
+   "R1_UB2",
+   6
+  ],
+  [
+   "R2_LB2",
+   "losers",
+   2,
+   1,
+   "L",
+   "R1_UB3",
+   5
+  ],
+  [
+   "R2_LB2",
+   "losers",
+   2,
+   2,
+   "L",
+   "R1_UB4",
+   7
+  ],
+  [
+   "R3_UBF",
+   "winners",
+   3,
+   1,
+   "W",
+   "R2_UB1",
+   1
+  ],
+  [
+   "R3_UBF",
+   "winners",
+   3,
+   2,
+   "W",
+   "R2_UB2",
+   2
+  ],
+  [
+   "R3_LB1",
+   "losers",
+   3,
+   1,
+   "L",
+   "R2_UB2",
+   3
+  ],
+  [
+   "R3_LB1",
+   "losers",
+   3,
+   2,
+   "W",
+   "R2_LB1",
+   6
+  ],
+  [
+   "R3_LB2",
+   "losers",
+   3,
+   1,
+   "L",
+   "R2_UB1",
+   4
+  ],
+  [
+   "R3_LB2",
+   "losers",
+   3,
+   2,
+   "W",
+   "R2_LB2",
+   5
+  ],
+  [
+   "R4_LBF",
+   "losers",
+   4,
+   1,
+   "W",
+   "R3_LB1",
+   3
+  ],
+  [
+   "R4_LBF",
+   "losers",
+   4,
+   2,
+   "W",
+   "R3_LB2",
+   4
+  ],
+  [
+   "R5_CF",
+   "losers",
+   5,
+   1,
+   "L",
+   "R3_UBF",
+   2
+  ],
+  [
+   "R5_CF",
+   "losers",
+   5,
+   2,
+   "W",
+   "R4_LBF",
+   3
+  ],
+  [
+   "R6_GF",
+   "grandfinal",
+   6,
+   1,
+   "W",
+   "R3_UBF",
+   1
+  ],
+  [
+   "R6_GF",
+   "grandfinal",
+   6,
+   2,
+   "W",
+   "R5_CF",
+   2
   ]
+ ],
+ "matches": [
+  [
+   "MATCH_0031",
+   "R1_UB1",
+   "",
+   "TEAM_0001",
+   "TEAM_0008",
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0032",
+   "R1_UB2",
+   "",
+   "TEAM_0004",
+   "TEAM_0006",
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0033",
+   "R1_UB3",
+   "",
+   "TEAM_0003",
+   "TEAM_0005",
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0034",
+   "R1_UB4",
+   "",
+   "TEAM_0002",
+   "TEAM_0007",
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0035",
+   "R2_UB1",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0036",
+   "R2_UB2",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0037",
+   "R2_LB1",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0038",
+   "R2_LB2",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0039",
+   "R3_UBF",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0040",
+   "R3_LB1",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0041",
+   "R3_LB2",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0042",
+   "R4_LBF",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0043",
+   "R5_CF",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ],
+  [
+   "MATCH_0044",
+   "R6_GF",
+   "",
+   null,
+   null,
+   "",
+   5,
+   "",
+   "",
+   null
+  ]
+ ]
 }

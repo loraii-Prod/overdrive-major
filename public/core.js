@@ -1,4 +1,4 @@
-/* OverDrive Major: shared client core — sync, derived tournament model, small components.
+/* OverDrive event template: shared client core — sync, derived tournament model, small components.
    Everything on screen is computed from the server's state; nothing here invents data. */
 "use strict";
 (() => {
@@ -60,18 +60,14 @@ OD.toast = (msg, bad) => {
 const norm = OD.norm = s => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 // short tags as used on eCircuitMania. Logos are files in public/logos/ named after the team (big.png, cook.png…):
 // drop the Major versions in with the same names and every graphic picks them up. COOK has no logo published yet.
-const TEAM_META = { big: { short: "BIG" }, futxheav: { short: "FxH" }, airwalkers: { short: "AW" }, cook: { short: "COOK" },
-  navixjoel: { short: "NxJ" }, ragnarok: { short: "RGNRK" }, allgamers: { short: "AG" }, rnboi: { short: "RNBOI" } };
+const TEAM_META = {};   // per-event short tags, e.g. { teamname: { short: "TAG" } }; otherwise the first 5 letters are used
 // sheet handle → verified-data key / portrait file, where they differ
-const PLAYER_ALIASES = { nablatm: "nabla", granady: "granady" };
+const PLAYER_ALIASES = {};
 // default portrait framing (focal point in % of the photo, zoom), set by eye for the bundled event photos; adjustable per player
-const PHOTO_FRAME = { binkss: [28, 32, 1.6], elconn21: [58, 20, 2.0], epos: [52, 26, 1.45], granady: [35, 12, 1.7], gwen: [50, 47, 1.35],
-  heav: [46, 32, 1.4], l1ngo: [50, 30, 1.8], massa: [62, 14, 1.7], melioo: [50, 32, 1.05], mime: [50, 30, 1.7], nablatm: [55, 30, 1.15],
-  nayko: [47, 26, 1.7], scrapie: [55, 28, 1.4], stufts: [63, 26, 1.9], walegen: [47, 14, 1.5], whizzy: [50, 22, 1.5] };
-const EVENT_DAY = "2026-11-22";
+const PHOTO_FRAME = {};   // per-player default framing: { handle: [focusX%, focusY%, zoom] }; adjustable in the producer
+let EVENT_DAY = new Date().toISOString().slice(0, 10);   // replaced by event.day from data/verified.json
 // other spellings seen on the Wildcard sheet, Liquipedia and eCircuitMania → Major sheet name
-const ALIASES = { teamcook: "cook", natusvincere: "navixjoel", navi: "navixjoel", nxj: "navixjoel", allgamersglobal: "allgamers", ag: "allgamers",
-  fxh: "futxheav", rgnrk: "ragnarok", aw: "airwalkers" };
+const ALIASES = {};   // other spellings of team names → sheet name (normalised), e.g. { navi: "navixjoel" }
 const NAT = { germany: "GER", france: "FRA", netherlands: "NED", unitedkingdom: "GBR", uk: "GBR", canada: "CAN", belgium: "BEL", poland: "POL",
   czechrepublic: "CZE", czechia: "CZE", spain: "ESP", italy: "ITA", unitedstates: "USA", usa: "USA", switzerland: "SUI", austria: "AUT", denmark: "DEN",
   sweden: "SWE", norway: "NOR", finland: "FIN", portugal: "POR", brazil: "BRA", japan: "JPN", china: "CHN", korea: "KOR", southkorea: "KOR", australia: "AUS",
@@ -83,6 +79,7 @@ const ROUND = { R1_UB: "Upper Round 1", R2_UB: "Upper Round 2", R3_UBF: "Upper F
 const ROUND_SHORT = { R1_UB: "UB R1", R2_UB: "UB R2", R3_UBF: "UB Final", R2_LB: "LB R1", R3_LB: "LB R2", R4_LBF: "LB Final", R5_CF: "Cons. Final", R6_GF: "Grand Final" };
 const ord = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
 OD.ord = ord;
+OD.tz = () => " " + ((OD.M && OD.M.event && OD.M.event.tz) || "CET");   // timezone label shown after match times
 const rkey = bid => (/^(R\d+_[A-Z]+?)(\d*)$/.exec(bid) || [])[1] || bid;
 OD.roundName = (bid, short) => { const k = rkey(bid), n = (/(\d+)$/.exec(bid) || [])[1], base = (short ? ROUND_SHORT : ROUND)[k] || bid;
   return n && !/F$/.test(k) ? base + (short ? " #" + n : " · Match " + n) : base; };
@@ -219,7 +216,7 @@ function derive(s) {
   M.teamLines = tid => { const t = teams[tid]; return t && V.teams ? (V.teams[norm(t.name)] || []) : []; };
   M.maps = () => ((V.maps && V.maps.list) || []).map(m => ({ ...m, photo: fileFor("maps", m.id) ? "/maps/" + fileFor("maps", m.id) : null }));
   M.mapsSource = (V.maps && V.maps.source) || "";
-  M.event = V.event || null;
+  M.event = V.event || null; if (M.event && M.event.day) EVENT_DAY = M.event.day;
   // prize for a placement label ("5th–6th"), from the verified event data only
   M.prize = place => { const e = M.event; if (!e || !e.prizes || !place) return null; const n = x => String(x).replace(/[\s–-]/g, "").toLowerCase();
     const hit = e.prizes.find(([p]) => n(p) === n(place)); return hit ? hit[1] : null; };

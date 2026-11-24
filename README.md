@@ -1,4 +1,6 @@
-# OverDrive Major 2026: broadcast graphics
+# OverDrive broadcast graphics: event template
+
+> **Setting up a new event? Start with [NEW-EVENT.md](NEW-EVENT.md).** This README describes the engine as built for the OverDrive Major 2026.
 
 One producer, nine browser sources, one page to run the show. Select the match once: every graphic prepares itself, and nothing goes on air until you put it there.
 

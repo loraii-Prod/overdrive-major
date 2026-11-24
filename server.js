@@ -1,4 +1,4 @@
-// OverDrive Major 2026: broadcast graphics engine + live sync server (no dependencies, Node 18+).
+// OverDrive event template: broadcast graphics engine + live sync server (no dependencies, Node 18+).
 //
 // Run locally:   node server.js            → http://localhost:10000/#control
 // Optional env:  PORT, SYNC_KEY (required for writes from other machines), DATA_DIR
@@ -23,8 +23,8 @@ const PUB = path.join(__dirname, "public");
 fs.mkdirSync(DATA, { recursive: true });
 
 const DEFAULT_SETTINGS = {
-  majorCsv: "https://docs.google.com/spreadsheets/d/14QAdrl-WX3c4JmtLOHIpTJiKBVNLLaQUfWZgyqVBS_w/gviz/tq?tqx=out:csv&gid=0&headers=1",
-  wildcardCsv: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQD2Um71alwYDoejxYV15ud9NZLq8E0re8efnSUDkw5M-HN_ApEd9KOmVhuiwEm0bzPdmdQbeHw0NgC/pub?gid=0&single=true&output=csv",
+  majorCsv: "",      // event Google Sheet (gviz CSV link). Empty: the bundled data/seed-major.json is used
+  wildcardCsv: "",   // optional previous-stage sheet (head-to-heads, road so far)
   autoSync: true, pollSec: 30, lpContact: ""
 };
 
@@ -120,16 +120,7 @@ let PRIV = Object.assign({ casters: {}, obs: { url: "ws://127.0.0.1:4455", passw
 if (MIGRATE_CAMS) { let ch = false; CIDS.forEach((c, i) => { if (PRIV.casters[c] && !PRIV.casters[MIDS[i]]) { PRIV.casters[MIDS[i]] = Object.assign({}, PRIV.casters[c]); ch = true; } }); if (ch) setTimeout(() => savePriv(), 0); }
 let privRev = Date.now();
 
-// seed facts once (verified, sourced; the producer can delete them)
-if (!S.facts.length && !S._factsSeeded) {
-  S.facts = [
-    { id: "f_big_split2", subject: { type: "team", id: "TEAM_0001" }, text: "BIG won OverDrive 2026 Split 2: Division 1, with Weibo x FUT runner-up",
-      source: "Liquipedia", url: "https://liquipedia.net/trackmania/OverDrive", addedAt: "2026-11-21T17:50:00Z" },
-    { id: "f_major_pool", subject: { type: "event", id: "major" }, text: "8 teams compete for a €13,600 prize pool at the OverDrive Major",
-      source: "Liquipedia", url: "https://liquipedia.net/trackmania/OverDrive/2026/Split_3/Major", addedAt: "2026-11-21T17:50:00Z" }
-  ];
-  S._factsSeeded = true;
-}
+// facts start empty; add them in the producer (Settings → Facts)
 
 /* ------------------------------------------------------------------ CSV + time helpers */
 function parseCSV(text) {
@@ -282,6 +273,7 @@ async function fetchText(url, ms = 15000, headers = {}) {
   } finally { clearTimeout(t); }
 }
 async function pullMajor() {
+  if (!S.settings.majorCsv) { Object.assign(SRC.major, { ok: null, origin: "seed", error: null }); return; }
   SRC.major.checkedAt = new Date().toISOString();
   try {
     const next = parseMajor(await fetchText(S.settings.majorCsv));
@@ -295,6 +287,7 @@ async function pullMajor() {
   }
 }
 async function pullWildcard() {
+  if (!S.settings.wildcardCsv) return;
   SRC.wildcard.checkedAt = new Date().toISOString();
   try {
     WILD = parseWildcard(await fetchText(S.settings.wildcardCsv));
@@ -588,7 +581,7 @@ if (require.main === module) {
     throw e;
   });
   server.listen(PORT, () => {
-    console.log(`OverDrive Major graphics on http://localhost:${PORT}/  ·  producer: http://localhost:${PORT}/#control`);
+    console.log(`OverDrive graphics on http://localhost:${PORT}/  ·  producer: http://localhost:${PORT}/#control`);
     console.log(KEY ? "Writes need the SYNC_KEY." : "No SYNC_KEY set: changes are accepted from this computer only.");
   });
   trackEvents();

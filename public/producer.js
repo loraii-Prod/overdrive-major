@@ -1,4 +1,4 @@
-/* OverDrive Major: producer (#control). Broadcast control surface for one operator.
+/* OverDrive event template: producer (#control). Broadcast control surface for one operator.
    Same actions and state as before; layout follows the approved design (status bar, F1–F8 pages, PVW/PGM monitors,
    persistent editorial panel). Nothing airs without an explicit Show / Take. */
 "use strict";
@@ -86,8 +86,8 @@ function statusBar(s, M) {
     <button class="am" data-go="overview" title="Change the broadcast match on Overview">${r && r.ready ? `${logoImg(r.t[0])}<b>${esc(OD.tname(r.t[0]))}</b><i>VS</i><b>${esc(OD.tname(r.t[1]))}</b>${logoImg(r.t[1])}<span class="id">${esc(r.id)}</span>`
       : `<span class="kv2"><small>Broadcast match</small><span>${r ? esc(r.round) + " · teams TBD" : "None selected"}</span></span>`}</button>
     <div class="kv2"><small>Stage</small><span>${r ? esc(r.round) + " · Bo" + esc(r.bo) : "—"}</span></div>
-    <div class="kv2 opt"><small>${r && (r.status === "live" || r.winner) ? "Score" : "Start"}</small><span>${r ? (r.status === "live" || r.winner ? esc(r.s1 || 0) + "–" + esc(r.s2 || 0) : esc(OD.time(r.at)) + " CET") : "—"}</span></div>
-    <div class="kv2"><small>Major data</small><span><i class="dot ${dataBad ? "bad" : dataWarn ? "amb" : ""}"></i>${esc(dataTxt)}</span></div>
+    <div class="kv2 opt"><small>${r && (r.status === "live" || r.winner) ? "Score" : "Start"}</small><span>${r ? (r.status === "live" || r.winner ? esc(r.s1 || 0) + "–" + esc(r.s2 || 0) : esc(OD.time(r.at)) + OD.tz()) : "—"}</span></div>
+    <div class="kv2"><small>Event data</small><span><i class="dot ${dataBad ? "bad" : dataWarn ? "amb" : ""}"></i>${esc(dataTxt)}</span></div>
     <div class="kv2"><small>Caster desk cams</small><span><i class="dot ${camOk}"></i>${d.mode === "local" ? "Local OBS" : "Integrated"} · ${d.layout === "solo" ? "Solo" : d.layout === "trio" ? "Trio" : "Dual"}</span></div>
     <button class="kv2 rdy" data-go="overview"><small>Match</small><span><i class="dot ${blocks ? "bad" : warns ? "amb" : ""}"></i>${blocks ? "Not ready" : warns ? warns + " to check" : "Ready"}</span></button>
     <div class="grow air">${air.join("") || `<span class="tag">Nothing on air</span>`}</div>
@@ -124,27 +124,27 @@ P.suggestions = (s, M) => {
   for (const e of s.events.slice(0, 20)) {
     const r = M.byId[e.mid]; if (!r || !r.ready || (act && r.id === act.id)) continue;
     out.push({ id: "ev:" + e.id, pri: 0, kind: e.kind === "result" ? "Result" : "Live score", title: `${OD.tname(r.t[0])} ${e.s1 || 0}–${e.s2 || 0} ${OD.tname(r.t[1])}`,
-      src: e.sim ? "Simulation" : "Major sheet", at: e.at, g: { type: "result", params: { mid: r.id } } });
+      src: e.sim ? "Simulation" : "Event sheet", at: e.at, g: { type: "result", params: { mid: r.id } } });
   }
   for (const tid of actTeams) for (const pid of M.team(tid).players) {
     const a = M.achievements(pid)[0];
     if (a) out.push({ id: "ach:" + pid + ":" + a.event, pri: 1, kind: "Player record", title: `${M.player(pid).name}: ${a.place}, ${a.event}`,
-      src: a.src === "Liquipedia" ? "Liquipedia" : "Liquipedia import", at: a.src === "Liquipedia" ? "2026-11-10T12:00:00Z" : (s.lp[pid] || {}).fetchedAt, g: { type: "achievements", params: { pid } }, rel: [tid] });
+      src: a.src === "Liquipedia" ? "Liquipedia" : "Liquipedia import", at: a.src === "Liquipedia" ? ((s.verified || {}).event || {}).careerReadAt || null : (s.lp[pid] || {}).fetchedAt, g: { type: "achievements", params: { pid } }, rel: [tid] });
   }
   for (const r of M.list) {
     if (r.winner && seed(r.winner) && seed(r.loser) && seed(r.winner) > seed(r.loser))
-      out.push({ id: "upset:" + r.id, pri: 2, kind: "Upset", title: `Seed ${seed(r.winner)} ${OD.tname(r.winner)} beat seed ${seed(r.loser)} ${OD.tname(r.loser)}`, src: "Major sheet", at: seenAt, g: { type: "result", params: { mid: r.id } }, rel: r.t });
+      out.push({ id: "upset:" + r.id, pri: 2, kind: "Upset", title: `Seed ${seed(r.winner)} ${OD.tname(r.winner)} beat seed ${seed(r.loser)} ${OD.tname(r.loser)}`, src: "Event sheet", at: seenAt, g: { type: "result", params: { mid: r.id } }, rel: r.t });
     if (r.winner && r.elimPlace)
-      out.push({ id: "elim:" + r.id, pri: 2, kind: "Elimination", title: `${OD.tname(r.loser)} eliminated (${r.elimPlace})`, src: "Major sheet", at: seenAt, g: { type: "result", params: { mid: r.id } }, rel: r.t });
+      out.push({ id: "elim:" + r.id, pri: 2, kind: "Elimination", title: `${OD.tname(r.loser)} eliminated (${r.elimPlace})`, src: "Event sheet", at: seenAt, g: { type: "result", params: { mid: r.id } }, rel: r.t });
     if (r.ready && !r.winner && seed(r.t[0]) && seed(r.t[1]) && Math.abs(seed(r.t[0]) - seed(r.t[1])) >= 3)
-      out.push({ id: "pot:" + r.id, pri: 3, kind: "Potential upset", title: `${OD.tname(r.t[0])} (${seed(r.t[0])}) vs ${OD.tname(r.t[1])} (${seed(r.t[1])})`, src: "Major sheet", at: seenAt, g: { type: "seeds", params: { mid: r.id } }, rel: r.t });
+      out.push({ id: "pot:" + r.id, pri: 3, kind: "Potential upset", title: `${OD.tname(r.t[0])} (${seed(r.t[0])}) vs ${OD.tname(r.t[1])} (${seed(r.t[1])})`, src: "Event sheet", at: seenAt, g: { type: "seeds", params: { mid: r.id } }, rel: r.t });
     if (r.ready && !r.winner) { const h = M.h2h(r.t[0], r.t[1]);
-      if (h.length) out.push({ id: "rematch:" + r.id + ":" + h.length, pri: 2, kind: "Rematch", title: `${OD.tname(r.t[0])} and ${OD.tname(r.t[1])} meet again`, src: "Major + Wildcard sheets", at: seenAt, g: { type: "h2h", params: { mid: r.id } }, rel: r.t }); }
+      if (h.length) out.push({ id: "rematch:" + r.id + ":" + h.length, pri: 2, kind: "Rematch", title: `${OD.tname(r.t[0])} and ${OD.tname(r.t[1])} meet again`, src: "Event + Wildcard sheets", at: seenAt, g: { type: "h2h", params: { mid: r.id } }, rel: r.t }); }
   }
   for (const t of Object.values(M.teams)) {
     const rec = M.record(t.id), sd = M.seeds(t.id);
-    if (rec.sw >= 2 && rec.ml === 0) out.push({ id: "clean:" + t.id + ":" + rec.mw, pri: 3, kind: "Form", title: `${t.name} have not dropped a map (${rec.mw}–0)`, src: "Major sheet", at: seenAt, g: { type: "path", params: { tid: t.id } }, rel: [t.id] });
-    if (sd && sd.current && sd.original && sd.original - sd.current >= 2) out.push({ id: "seed:" + t.id + ":" + sd.current, pri: 3, kind: "Seed takeover", title: `${t.name}: seed ${sd.original} → ${sd.current}`, src: "Major sheet", at: seenAt, g: { type: "team", params: { tid: t.id } }, rel: [t.id] });
+    if (rec.sw >= 2 && rec.ml === 0) out.push({ id: "clean:" + t.id + ":" + rec.mw, pri: 3, kind: "Form", title: `${t.name} have not dropped a map (${rec.mw}–0)`, src: "Event sheet", at: seenAt, g: { type: "path", params: { tid: t.id } }, rel: [t.id] });
+    if (sd && sd.current && sd.original && sd.original - sd.current >= 2) out.push({ id: "seed:" + t.id + ":" + sd.current, pri: 3, kind: "Seed takeover", title: `${t.name}: seed ${sd.original} → ${sd.current}`, src: "Event sheet", at: seenAt, g: { type: "team", params: { tid: t.id } }, rel: [t.id] });
   }
   for (const f of s.facts || []) if (f.subject.type !== "team" || actTeams.includes(f.subject.id))
     out.push({ id: "fact:" + f.id, pri: f.subject.type === "team" ? 1 : 4, kind: "Fact", title: f.text, src: f.source, at: f.addedAt, g: { type: "fact", params: { fid: f.id } }, rel: f.subject.type === "team" ? [f.subject.id] : [] });
@@ -173,7 +173,7 @@ VIEWS.overview = {
       if (!r) return `<div class="mh"><div class="side L"><div><div class="nm">No broadcast match</div><div class="sub">Select one in the match queue.</div></div></div></div>`;
       if (!r.ready) return `<div class="mh"><div class="side L"><div><div class="nm">${esc(r.round)}</div><div class="sub">${esc(r.hint[0])} vs ${esc(r.hint[1])}</div></div></div></div>`;
       const side = (i, R) => { const id = r.t[i], t = M.team(id), sd = M.seeds(id), rec = M.record(id);
-        const sub = `Seed ${esc(r.seed[i] || sd.original)}${r.seed[i] && r.seed[i] !== sd.original ? " (orig. " + sd.original + ")" : ""} · Major ${rec.sw}–${rec.sl} · maps ${rec.mw}–${rec.ml}`;
+        const sub = `Seed ${esc(r.seed[i] || sd.original)}${r.seed[i] && r.seed[i] !== sd.original ? " (orig. " + sd.original + ")" : ""} · Event ${rec.sw}–${rec.sl} · maps ${rec.mw}–${rec.ml}`;
         return `<div class="side ${R ? "R" : "L"}">${R ? "" : logoImg(id)}<div><div class="nm">${esc(t.name)}</div><div class="sub">${sub}</div></div>${R ? logoImg(id) : ""}</div>`; };
       return `<div class="mh">${side(0)}<div class="vs"><b>${esc(r.round)}</b><span>${r.status === "live" || r.winner ? `${esc(r.s1 || 0)}–${esc(r.s2 || 0)} · ${r.winner ? "final" : "live"}` : `Bo${esc(r.bo)} · ${esc(OD.day(r.at))} ${esc(OD.time(r.at))}`}</span></div>${side(1, 1)}
         <div class="rw" style="flex-direction:column;align-items:stretch">${btn("Match data", "", {}, "", false, "Scores, status overrides and simulation").replace('data-act=""', 'data-go="bracket"')}</div></div>`; },
@@ -453,12 +453,12 @@ VIEWS.settings = {
   live: {
     stSrc: s => { const m = s.sources.major, w = s.sources.wildcard, l = s.sources.liquipedia;
       const row = (n, d, st, act) => `<div class="li" style="grid-template-columns:1fr auto"><div style="min-width:0"><div class="t">${n}</div><div class="m">${d}</div><div class="m" style="color:${/offline|error/i.test(st) ? "var(--amb)" : "var(--dim)"}">${st}</div></div>${act || ""}</div>`;
-      return row("Major sheet", "Teams, rosters, seeds, schedule, scores", m.ok === false ? `Offline (${esc(m.error)}) · ${esc(m.origin)} data from ${esc(OD.ago(m.at))}` : `${esc(m.origin)} · ${esc(OD.ago(m.at))}`, btn("Refresh", "source.refresh", { which: "major" }, "xs"))
+      return row("Event sheet", "Teams, rosters, seeds, schedule, scores", m.ok === false ? `Offline (${esc(m.error)}) · ${esc(m.origin)} data from ${esc(OD.ago(m.at))}` : `${esc(m.origin)} · ${esc(OD.ago(m.at))}`, btn("Refresh", "source.refresh", { which: "major" }, "xs"))
         + row("Wildcard sheet", "Previous results, head-to-heads", w.ok === false ? `Offline (${esc(w.error)})` : w.at ? esc(OD.ago(w.at)) : "not loaded", btn("Refresh", "source.refresh", { which: "wildcard" }, "xs"))
         + row("Liquipedia", "Optional imports, approved per player", l.running ? `Importing ${l.done}/${l.total} · one page per 30 s` : "idle", btn("Import all", "lp.import", {}, "xs", l.running))
         + row("eCircuitMania", "No public API; manual reference", `<a href="https://ecircuitmania.com/tournaments/OD26Major" target="_blank" rel="noopener" style="color:var(--dim)">Open in browser</a>`)
         + `<div class="pb grp"><div class="rw">${sw("Auto-sync", s.settings.autoSync, `data-setb="autoSync"`)}<span class="gl">every</span><input class="in" style="width:64px" type="number" min="15" max="600" value="${esc(s.settings.pollSec)}" data-setn="pollSec"><span class="gl">s</span></div>
-          <div class="field"><label>Major CSV</label><input class="in mono" data-sett="majorCsv" value="${esc(s.settings.majorCsv)}"></div><div class="field"><label>Wildcard CSV</label><input class="in mono" data-sett="wildcardCsv" value="${esc(s.settings.wildcardCsv)}"></div>
+          <div class="field"><label>Event sheet CSV</label><input class="in mono" data-sett="majorCsv" value="${esc(s.settings.majorCsv)}"></div><div class="field"><label>Wildcard CSV</label><input class="in mono" data-sett="wildcardCsv" value="${esc(s.settings.wildcardCsv)}"></div>
           <div class="field"><label>Contact for Liquipedia's User-Agent</label><input class="in" data-sett="lpContact" value="${esc(s.settings.lpContact)}" placeholder="Discord or email"></div></div>`; },
     stSim: s => `<div class="rw">${btn(s.sim.on ? "Simulation on" : "Simulation off", "sim.toggle", { on: !s.sim.on }, s.sim.on ? "on" : "")}${btn("Reset results", "sim.reset", {}, "", !Object.keys(s.sim.matches).length)}</div><div class="m">Fake results on top of real data for rehearsal; use +1 on Bracket → Match data.</div>`,
     stObsSrc: () => SOURCES.map(([h, n, k]) => `<div class="li" style="grid-template-columns:1fr auto"><div style="min-width:0"><div class="t">${esc(n)}</div><div class="m mono-s">${esc(srcURL(h, k))}</div></div><button class="b xs" data-copy="${esc(srcURL(h, k))}">Copy</button></div>`).join("")
