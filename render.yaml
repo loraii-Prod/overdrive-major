@@ -2,7 +2,7 @@
 # Render's free disk is wiped on restart, so saved state (casters, predictions) would be lost there.
 services:
   - type: web
-    name: overdrive-major-live
+    name: overdrive-event
     runtime: node
     buildCommand: echo "no dependencies"
     startCommand: node server.js
